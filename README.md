@@ -1,7 +1,7 @@
 # AbU compiler
 A compiler for the AbU language.
 
-`abuc` is a compiler translating programs written in the AbU DSL `abudsl` to different platforms. At the moment, the compiler supports the following target platforms: *Golang* code, *amd64* executables and *arm64* executables.
+`abuc` is a compiler translating programs written in the AbU DSL [`abudsl`](https://github.com/abu-lang/abudsl) to different platforms. At the moment, the compiler supports the following target platforms: *Golang* code, *amd64* executables and *arm64* executables.
 
 ## Usage
 ```
