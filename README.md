@@ -5,10 +5,13 @@ A compiler for the AbU language.
 
 ## Usage
 ```
-Usage: abuc [-o <output>] -t <target> <source>
+Usage: abuc [-iv] [-o <output>] -t <target> [-c <config>] <source>
   <source>                 filename of the source code to compile
-  -o, --output <output>    output filename for the compiled source
+  -o, --output <output>    output filename for the compiled source [optional]
   -t, --target <target>    target language or architecture
+  -c, --config <config>    configuration file for <target> [optional]
+  -i, --intermediate       intermediate (single node) .abu files are generated [optional]
+  -v, --version            print version information and exit [optional]
 
 Available options for <target>:
   go       compile into 'Golang' code
