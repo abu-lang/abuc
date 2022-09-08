@@ -1,6 +1,7 @@
 package preprocessor
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/abu-lang/abuc/preprocessor/parser"
@@ -64,7 +65,9 @@ func preprocessedStreamsFromCharStream(stream antlr.CharStream) (map[string]Triv
 	par.BuildParseTrees = true
 	lis := newAbuPreproc(toks, errLis.addError)
 	tree := par.Program()
-	antlr.ParseTreeWalkerDefault.Walk(lis, tree)
+	if !<-walkParseTree(lis, tree) && len(errLis.errors) == 0 {
+		errLis.addError(errors.New("error during parsing"))
+	}
 	if len(errLis.errors) > 0 {
 		return nil, errLis.errors
 	}
@@ -73,4 +76,19 @@ func preprocessedStreamsFromCharStream(stream antlr.CharStream) (map[string]Triv
 		res[d] = alteredTokenStream{program: d, rewriter: lis.rewriter}
 	}
 	return res, nil
+}
+
+// walkParseTree performs a walk on the passed parse tree calling the methods of
+// the ParseTreeListener argument. It returns a channel that passes a boolean value.
+// The passed boolean is false only if a panic is throwed in the goroutine performing
+// the walk.
+func walkParseTree(list antlr.ParseTreeListener, tree antlr.Tree) <-chan bool {
+	res := make(chan bool)
+	go func() {
+		defer func() {
+			res <- nil == recover()
+		}()
+		antlr.ParseTreeWalkerDefault.Walk(list, tree)
+	}()
+	return res
 }
