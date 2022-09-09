@@ -28,7 +28,7 @@ func main() {
 
     lg_cfg := config.LogConfig{Level: config.LogInfo}
     dev_agent := communication.NewMemberlistAgent("{{.Id}}", *port_opt, lg_cfg, split_join_opt()...)
-    device, err := goabu.NewExecuter(dev_state, knowledge_base, dev_agent, lg_cfg{{if .Invariant}}, "{{.Invariant}}"{{end}})
+    device, err := goabu.NewExecuter(dev_state, knowledge_base, dev_agent, lg_cfg{{if .Invariant}}, `{{.Invariant}}`{{end}})
     if err != nil {
         panic(err)
     }
