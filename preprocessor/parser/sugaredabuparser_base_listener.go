@@ -26,6 +26,18 @@ func (s *BaseSugaredAbuParserListener) EnterProgram(ctx *ProgramContext) {}
 // ExitProgram is called when production program is exited.
 func (s *BaseSugaredAbuParserListener) ExitProgram(ctx *ProgramContext) {}
 
+// EnterTypeDecl is called when production typeDecl is entered.
+func (s *BaseSugaredAbuParserListener) EnterTypeDecl(ctx *TypeDeclContext) {}
+
+// ExitTypeDecl is called when production typeDecl is exited.
+func (s *BaseSugaredAbuParserListener) ExitTypeDecl(ctx *TypeDeclContext) {}
+
+// EnterResField is called when production resField is entered.
+func (s *BaseSugaredAbuParserListener) EnterResField(ctx *ResFieldContext) {}
+
+// ExitResField is called when production resField is exited.
+func (s *BaseSugaredAbuParserListener) ExitResField(ctx *ResFieldContext) {}
+
 // EnterDevice is called when production device is entered.
 func (s *BaseSugaredAbuParserListener) EnterDevice(ctx *DeviceContext) {}
 
@@ -43,6 +55,12 @@ func (s *BaseSugaredAbuParserListener) EnterResDecl(ctx *ResDeclContext) {}
 
 // ExitResDecl is called when production resDecl is exited.
 func (s *BaseSugaredAbuParserListener) ExitResDecl(ctx *ResDeclContext) {}
+
+// EnterCompResDecl is called when production compResDecl is entered.
+func (s *BaseSugaredAbuParserListener) EnterCompResDecl(ctx *CompResDeclContext) {}
+
+// ExitCompResDecl is called when production compResDecl is exited.
+func (s *BaseSugaredAbuParserListener) ExitCompResDecl(ctx *CompResDeclContext) {}
 
 // EnterType is called when production type is entered.
 func (s *BaseSugaredAbuParserListener) EnterType(ctx *TypeContext) {}
@@ -121,6 +139,18 @@ func (s *BaseSugaredAbuParserListener) EnterResource(ctx *ResourceContext) {}
 
 // ExitResource is called when production resource is exited.
 func (s *BaseSugaredAbuParserListener) ExitResource(ctx *ResourceContext) {}
+
+// EnterSimpleResource is called when production simpleResource is entered.
+func (s *BaseSugaredAbuParserListener) EnterSimpleResource(ctx *SimpleResourceContext) {}
+
+// ExitSimpleResource is called when production simpleResource is exited.
+func (s *BaseSugaredAbuParserListener) ExitSimpleResource(ctx *SimpleResourceContext) {}
+
+// EnterNestedResource is called when production nestedResource is entered.
+func (s *BaseSugaredAbuParserListener) EnterNestedResource(ctx *NestedResourceContext) {}
+
+// ExitNestedResource is called when production nestedResource is exited.
+func (s *BaseSugaredAbuParserListener) ExitNestedResource(ctx *NestedResourceContext) {}
 
 // EnterDecimalLiteral is called when production decimalLiteral is entered.
 func (s *BaseSugaredAbuParserListener) EnterDecimalLiteral(ctx *DecimalLiteralContext) {}

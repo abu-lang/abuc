@@ -3,7 +3,17 @@ parser grammar SugaredAbuParser;
 options {tokenVocab=SugaredAbuLexer;}
 
 program
-    : device+ ecarule*
+    : typeDecl* device+ ecarule*
+    ;
+
+typeDecl
+    : DEFINE ID AS CL_BRACKET resField+ CR_BRACKET
+    ;
+
+resField
+    : ID COLON PHYSICAL OUTPUT type
+    | ID COLON PHYSICAL INPUT type
+    | ID COLON LOGICAL type
     ;
 
 device
@@ -18,6 +28,11 @@ resDecl
     : PHYSICAL OUTPUT type ID EQUALSIGN expression
     | PHYSICAL INPUT type ID
     | LOGICAL type ID EQUALSIGN expression
+    | compResDecl
+    ;
+
+compResDecl
+    : ID ID (EQUALSIGN RL_BRACKET ID EQUALSIGN expression (COMMA ID EQUALSIGN expression)* RR_BRACKET)?
     ;
 
 type
@@ -25,8 +40,8 @@ type
     ;
 
 ecarule
-    : RULE ID ON ID+ (LET letDecl IN)? task+
-    | RULE ID ON ID+ DEFAULT actions (LET letDecl IN)? task*
+    : RULE ID ON resource+ (LET letDecl IN)? task+
+    | RULE ID ON resource+ DEFAULT actions (LET letDecl IN)? task*
     ;
 
 letDecl
@@ -44,8 +59,7 @@ actions
     ;
 
 assignment
-    : THIS? ID EQUALSIGN expression
-    | EXT ID EQUALSIGN expression
+    : resource EQUALSIGN expression
     ;
 
 expression
@@ -86,8 +100,18 @@ value
     ;
 
 resource
+    : simpleResource
+    | nestedResource
+    ;
+
+simpleResource
     : THIS? ID
     | EXT ID
+    ;
+
+nestedResource
+    : THIS? ID SL_BRACKET ID SR_BRACKET
+    | EXT ID SL_BRACKET ID SR_BRACKET
     ;
 
 decimalLiteral

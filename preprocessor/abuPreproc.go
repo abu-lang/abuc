@@ -31,8 +31,8 @@ func newAbuPreproc(stream *antlr.CommonTokenStream, errorCallback func(error)) *
 	}
 }
 
-// ExitResource is called when production resource is exited.
-func (l *abuPreproc) ExitResource(ctx *parser.ResourceContext) {
+// ExitSimpleResource is called when production simpleResource is exited.
+func (l *abuPreproc) ExitSimpleResource(ctx *parser.SimpleResourceContext) {
 	expr, present := l.letExprs[ctx.ID().GetText()]
 	if !present {
 		return
@@ -44,6 +44,25 @@ func (l *abuPreproc) ExitResource(ctx *parser.ResourceContext) {
 				ctx.ID().GetSymbol(),
 				expr,
 			)
+		}
+	}
+}
+
+// ExitNestedResource is called when production nestedResource is exited.
+func (l *abuPreproc) ExitNestedResource(ctx *parser.NestedResourceContext) {
+	for i := 0; i < 2; i++ {
+		expr, present := l.letExprs[ctx.ID(i).GetText()]
+		if !present {
+			continue
+		}
+		for d := range l.devices {
+			if l.hasRule(d, l.rule) {
+				l.rewriter.ReplaceToken(d,
+					ctx.ID(i).GetSymbol(),
+					ctx.ID(i).GetSymbol(),
+					expr,
+				)
+			}
 		}
 	}
 }
@@ -145,6 +164,6 @@ func (l *abuPreproc) alteredCondition(prog string, ctx *parser.TaskContext) stri
 
 // hasRule returns true if the device has the rule from the EcaruleContext.
 func (l *abuPreproc) hasRule(dev string, ctx *parser.EcaruleContext) bool {
-	_, res := l.hasRules[dev][ctx.ID(0).GetText()]
+	_, res := l.hasRules[dev][ctx.ID().GetText()]
 	return res
 }

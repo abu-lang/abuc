@@ -26,9 +26,12 @@ COLON           : ':' ;
 SEMICOLON       : ';' ;
 COLONEQUAL      : ':=';
 EQUALSIGN       : '=' ;
+COMMA           : ',' ;
 
 RL_BRACKET      : '(' ;
 RR_BRACKET      : ')' ;
+SL_BRACKET      : '[' ;
+SR_BRACKET      : ']' ;
 CL_BRACKET      : '{' ;
 CR_BRACKET      : '}' ;
 
@@ -49,6 +52,8 @@ FOR             : 'for'      ;
 ALL             : 'all'      ;
 DO              : 'do'       ;
 OWISE           : 'owise'    ;
+DEFINE          : 'define'   ;
+AS              : 'as'       ;
 
 BOOLEAN         : 'boolean' ;
 INTEGER         : 'integer' ;
