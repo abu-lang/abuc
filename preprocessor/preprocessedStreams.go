@@ -23,37 +23,40 @@ func (h *errorHolder) addError(err error) {
 
 // PreprocessedStreamsFromFile takes a file name of an abudsl program and performs
 // desugaring and splitting. It returns a map where the the keys are the device ids
-// while the values are the corresponding desugared text streams. If an error is
-// encountered during the preprocessing, a not empty []error is returned.
+// while the values are the corresponding desugared text streams and the program's
+// symbol table. If an error is encountered during the preprocessing, a not empty
+// []error is returned.
 //
 // NOTE: In the future it may return a map[string]antlr.CharStream
-func PreprocessedStreamsFromFile(fileName string) (map[string]TrivialStream, []error) {
+func PreprocessedStreamsFromFile(fileName string) (map[string]TrivialStream, SymbolTable, []error) {
 	var cs antlr.CharStream
 	var err error
 	cs, err = antlr.NewFileStream(fileName)
 	if err != nil {
-		return nil, []error{err}
+		return nil, SymbolTable{}, []error{err}
 	}
 	return preprocessedStreamsFromCharStream(cs)
 }
 
 // PreprocessedStreams takes a string containing an abudsl program and performs
 // desugaring and splitting. It returns a map where the the keys are the device ids
-// while the values are the corresponding desugared text streams. If an error is
-// encountered during the preprocessing, a not empty []error is returned.
+// while the values are the corresponding desugared text streams and the program's
+// symbol table. If an error is encountered during the preprocessing, a not empty
+// []error is returned.
 //
 // NOTE: In the future it may return a map[string]antlr.CharStream
-func PreprocessedStreams(input string) (map[string]TrivialStream, []error) {
+func PreprocessedStreams(input string) (map[string]TrivialStream, SymbolTable, []error) {
 	return preprocessedStreamsFromCharStream(antlr.NewInputStream(input))
 }
 
 // preprocessedStreamsFromCharStream takes a text stream of an abudsl program and performs
 // desugaring and splitting. It returns a map where the the keys are the device ids
-// while the values are the corresponding desugared text streams. If an error is
-// encountered during the preprocessing, a not empty []error is returned.
+// while the values are the corresponding desugared text streams and the program's
+// symbol table. If an error is encountered during the preprocessing, a not empty
+// []error is returned.
 //
 // NOTE: In the future it may return a map[string]antlr.CharStream
-func preprocessedStreamsFromCharStream(stream antlr.CharStream) (map[string]TrivialStream, []error) {
+func preprocessedStreamsFromCharStream(stream antlr.CharStream) (map[string]TrivialStream, SymbolTable, []error) {
 	errLis := &errorHolder{}
 	lex := parser.NewSugaredAbuLexer(stream)
 	lex.RemoveErrorListeners()
@@ -69,13 +72,13 @@ func preprocessedStreamsFromCharStream(stream antlr.CharStream) (map[string]Triv
 		errLis.addError(errors.New("error during parsing"))
 	}
 	if len(errLis.errors) > 0 {
-		return nil, errLis.errors
+		return nil, SymbolTable{}, errLis.errors
 	}
 	res := make(map[string]TrivialStream)
-	for d := range lis.devices {
+	for _, d := range lis.devices {
 		res[d] = alteredTokenStream{program: d, rewriter: lis.rewriter}
 	}
-	return res, nil
+	return res, lis.symbols, nil
 }
 
 // walkParseTree performs a walk on the passed parse tree calling the methods of

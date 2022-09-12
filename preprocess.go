@@ -12,26 +12,26 @@ import (
 // preprocess behaves as preprocessor.PreprocessedStreamsFromFile but accepts a callback that
 // is called if some errors are encountered. If the file name == "" the input is read from
 // the standard input.
-func preprocess(fileName string, errCb func([]error)) map[string]preprocessor.TrivialStream {
+func preprocess(fileName string, errCb func([]error)) (map[string]preprocessor.TrivialStream, preprocessor.SymbolTable) {
 	if fileName == "" {
 		istr, err := inputStringFromStdin()
 		if err != nil {
 			errCb([]error{errors.New("error in reading from stdin: " + err.Error())})
-			return nil
+			return nil, preprocessor.SymbolTable{}
 		}
-		res, errs := preprocessor.PreprocessedStreams(istr)
+		res, st, errs := preprocessor.PreprocessedStreams(istr)
 		if len(errs) > 0 {
 			errCb(errs)
-			return nil
+			return nil, preprocessor.SymbolTable{}
 		}
-		return res
+		return res, st
 	}
-	res, errs := preprocessor.PreprocessedStreamsFromFile(fileName)
+	res, st, errs := preprocessor.PreprocessedStreamsFromFile(fileName)
 	if len(errs) > 0 {
 		errCb(errs)
-		return nil
+		return nil, preprocessor.SymbolTable{}
 	}
-	return res
+	return res, st
 }
 
 // inputStringFromStdin returns the content of the

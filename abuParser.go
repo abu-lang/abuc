@@ -4,9 +4,11 @@ import (
 	"fmt"
 
 	"github.com/abu-lang/abuc/parser"
+	"github.com/abu-lang/abuc/preprocessor"
 )
 
 type abuProgram struct {
+	preprocessor.DeviceSymbolTable
 	id        string
 	invariant *parser.IExpressionContext
 	resources map[string]abuResource
@@ -15,23 +17,22 @@ type abuProgram struct {
 }
 
 type abuResource struct {
-	id       string
-	typ      string
-	readable bool
-	writable bool
+	preprocessor.AbuType
 	initExpr *parser.IExpressionContext
 }
 
 type abuParser struct {
 	parser.BaseAbuParserListener
-	abuProgram
 
+	abuProgram
 	inRuleDefs bool
 	parseError func(error)
 }
 
-func newAbuParser(errorCallback func(error)) *abuParser {
+func newAbuParser(st preprocessor.DeviceSymbolTable, errorCallback func(error)) *abuParser {
+	p := abuProgram{DeviceSymbolTable: st}
 	res := &abuParser{
+		abuProgram: p,
 		parseError: errorCallback,
 	}
 	res.resources = make(map[string]abuResource)
@@ -42,22 +43,22 @@ func newAbuParser(errorCallback func(error)) *abuParser {
 
 // EnterResDecl is called when production resDecl is entered.
 func (p *abuParser) EnterResDecl(ctx *parser.ResDeclContext) {
-	r := abuResource{
-		readable: true,
-		writable: true,
-		id:       ctx.ID().GetText(),
-		typ:      ctx.Type().GetText(),
+	t := preprocessor.AbuType{
+		Readable: true,
+		Writable: true,
+		TypeName: ctx.Type().GetText(),
 	}
+	r := abuResource{AbuType: t}
 	if ctx.Expression() != nil {
 		expr := ctx.Expression()
 		r.initExpr = &expr
 	}
 	if ctx.OUTPUT() != nil {
-		r.readable = false
+		r.Readable = false
 	} else if ctx.INPUT() != nil {
-		r.writable = false
+		r.Writable = false
 	}
-	p.resources[r.id] = r
+	p.resources[ctx.ID().GetText()] = r
 }
 
 // EnterResource is called when production resource is entered.
@@ -65,7 +66,7 @@ func (p *abuParser) EnterResource(ctx *parser.ResourceContext) {
 	if !p.inRuleDefs {
 		return
 	}
-	if ctx.EXT() == nil && !p.resources[ctx.ID().GetText()].readable {
+	if ctx.EXT() == nil && !p.resources[ctx.ID().GetText()].Readable {
 		p.parseError(fmt.Errorf("resource %s cannot be accessed", ctx.ID().GetText()))
 	}
 }
@@ -102,7 +103,7 @@ func (p *abuParser) EnterEcarule(ctx *parser.EcaruleContext) {
 
 // EnterAssignment is called when production assignment is entered.
 func (p *abuParser) EnterAssignment(ctx *parser.AssignmentContext) {
-	if ctx.EXT() == nil && !p.resources[ctx.ID().GetText()].writable {
+	if ctx.EXT() == nil && !p.resources[ctx.ID().GetText()].Writable {
 		p.parseError(fmt.Errorf("resource %s cannot be modified", ctx.ID().GetText()))
 	}
 }

@@ -46,13 +46,13 @@ func makeGoabuProgram(prog abuProgram, stream *antlr.CommonTokenStream) goabuPro
 		inv := list.getAlteredText(*prog.invariant)
 		res.Invariant = &inv
 	}
-	for _, r := range prog.resources {
-		resource := fmt.Sprintf(".%s[\"%s\"] = ", typeToGoabu(r.typ), r.id)
+	for id, r := range prog.resources {
+		resource := fmt.Sprintf(".%s[\"%s\"] = ", typeToGoabu(r.TypeName), id)
 		if r.initExpr != nil {
 			antlr.ParseTreeWalkerDefault.Walk(list, *r.initExpr)
 			resource += list.getAlteredText(*r.initExpr)
 		} else {
-			switch typeToGoabu(r.typ) {
+			switch typeToGoabu(r.TypeName) {
 			case "Bool":
 				resource += "true"
 			case "Integer":

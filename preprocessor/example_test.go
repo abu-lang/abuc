@@ -2,6 +2,7 @@ package preprocessor_test
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/abu-lang/abuc/preprocessor"
@@ -86,7 +87,7 @@ rule notifyHum
 	for all (ext.node == "hvac")
 		do ext.humidity = this.humidity`
 
-	streams, errs := preprocessor.PreprocessedStreams(input)
+	streams, typs, errs := preprocessor.PreprocessedStreams(input)
 	if len(errs) > 0 {
 		t.Fatal(errs[0].Error())
 	}
@@ -94,4 +95,6 @@ rule notifyHum
 		fmt.Printf("##################### Code for %s:\n", d)
 		fmt.Println(s.GetText(0, s.Size()-1))
 	}
+	fmt.Println("##################### Types")
+	typs.Encode(os.Stdout)
 }

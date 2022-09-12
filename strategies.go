@@ -58,7 +58,7 @@ type abuCompiler struct {
 	commonCompileInfo
 }
 
-func (a abuCompiler) compile(device string, stream preprocessor.TrivialStream) []error {
+func (a abuCompiler) compile(device string, stream preprocessor.TrivialStream, st preprocessor.DeviceSymbolTable) []error {
 	f, err := os.Create(a.outputFile(device, ".abu"))
 	if err != nil {
 		return []error{err}
@@ -80,9 +80,9 @@ type goabuCompiler struct {
 	template *template.Template
 }
 
-func (g goabuCompiler) compile(device string, stream preprocessor.TrivialStream) []error {
+func (g goabuCompiler) compile(device string, stream preprocessor.TrivialStream, st preprocessor.DeviceSymbolTable) []error {
 	var toks *antlr.CommonTokenStream = nil
-	abup, errs := parseAbuProgram(stream, &toks)
+	abup, errs := parseAbuProgram(stream, st, &toks)
 	if len(errs) > 0 {
 		return errs
 	}
@@ -104,7 +104,7 @@ func (g goabuCompiler) compile(device string, stream preprocessor.TrivialStream)
 // In the case of the occurrence of errors it returns a zero valued abuProgram and a not empty []error.
 // If it receives as argument a not nil **antlr.CommonTokenStream and no errors are encountered, the argument
 // is used as an output argument for returning the token stream used in the parsing.
-func parseAbuProgram(stream preprocessor.TrivialStream, tsOut ...**antlr.CommonTokenStream) (abuProgram, []error) {
+func parseAbuProgram(stream preprocessor.TrivialStream, st preprocessor.DeviceSymbolTable, tsOut ...**antlr.CommonTokenStream) (abuProgram, []error) {
 	errList := &errorHolder{}
 	is := antlr.NewInputStream(stream.GetText(0, stream.Size()-1))
 	lex := parser.NewAbuLexer(is)
@@ -115,7 +115,7 @@ func parseAbuProgram(stream preprocessor.TrivialStream, tsOut ...**antlr.CommonT
 	par.RemoveErrorListeners()
 	par.AddErrorListener(errList)
 	par.BuildParseTrees = true
-	list := newAbuParser(errList.addError)
+	list := newAbuParser(st, errList.addError)
 	tree := par.Program()
 	antlr.ParseTreeWalkerDefault.Walk(list, tree)
 	if len(errList.errors) > 0 {

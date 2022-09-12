@@ -2,7 +2,6 @@
 package preprocessor
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/abu-lang/abuc/preprocessor/parser"
@@ -13,21 +12,109 @@ type abuPreproc struct {
 	parser.BaseSugaredAbuParserListener
 	rewriter *antlr.TokenStreamRewriter
 
-	letExprs map[string]string
-	rule     *parser.EcaruleContext
+	letExprs   map[string]string
+	rule       *parser.EcaruleContext
+	device     string
+	customType string
 
-	devNumber int
-	devices   map[string]int
-	hasRules  map[string]map[string]struct{}
+	devices  []string
+	hasRules map[string]map[string]struct{}
+
+	symbols SymbolTable
 
 	parseError func(error)
 }
 
 func newAbuPreproc(stream *antlr.CommonTokenStream, errorCallback func(error)) *abuPreproc {
 	return &abuPreproc{rewriter: antlr.NewTokenStreamRewriter(stream),
-		devices:    make(map[string]int),
 		hasRules:   make(map[string]map[string]struct{}),
+		symbols:    makeSymbolTable(),
 		parseError: errorCallback,
+	}
+}
+
+// EnterTypeDecl is called when production typeDecl is entered.
+func (l *abuPreproc) EnterTypeDecl(ctx *parser.TypeDeclContext) {
+	l.customType = ctx.ID().GetText()
+	_, present := l.symbols.simple[l.customType]
+	if present {
+		l.parseError(fmt.Errorf("redefined %s identifier", l.customType))
+		return
+	}
+	// register custom type
+	l.symbols.simple[l.customType] = make(map[string]AbuType)
+}
+
+// EnterResField is called when production resField is entered.
+func (l *abuPreproc) EnterResField(ctx *parser.ResFieldContext) {
+	field := ctx.ID().GetText()
+	_, present := l.symbols.simple[l.customType][field]
+	if present {
+		l.parseError(fmt.Errorf("redefined %s field in custom type %s", field, l.customType))
+		return
+	}
+	t := AbuType{
+		TypeName: ctx.Type().GetText(),
+		Readable: true,
+		Writable: true,
+	}
+	if ctx.OUTPUT() != nil {
+		t.Readable = false
+	} else if ctx.INPUT() != nil {
+		t.Writable = false
+	}
+	l.symbols.simple[l.customType][field] = t
+}
+
+// EnterDevice is called when production device is entered.
+func (l *abuPreproc) EnterDevice(ctx *parser.DeviceContext) {
+	devID := ctx.ID(0).GetText()
+	_, present := l.symbols.simple[devID]
+	if present {
+		l.parseError(fmt.Errorf("redefined %s identifier", devID))
+		return
+	}
+	// register device
+	l.device = devID
+	l.devices = append(l.devices, devID)
+	l.symbols.simple[devID] = make(map[string]AbuType)
+	l.symbols.nested[devID] = make(map[pair[string]]AbuType)
+	l.hasRules[devID] = make(map[string]struct{})
+	for i := 1; ctx.ID(i) != nil; i++ {
+		l.hasRules[devID][ctx.ID(i).GetText()] = struct{}{}
+	}
+}
+
+// ExitResDecl is called when production resDecl is exited.
+func (l *abuPreproc) ExitResDecl(ctx *parser.ResDeclContext) {
+	if ctx.CompResDecl() != nil {
+		return
+	}
+	t := AbuType{
+		TypeName: ctx.Type().GetText(),
+		Readable: true,
+		Writable: true,
+	}
+	if ctx.OUTPUT() != nil {
+		t.Readable = false
+	} else if ctx.INPUT() != nil {
+		t.Writable = false
+	}
+	l.symbols.simple[l.device][ctx.ID().GetText()] = t
+}
+
+// EnterCompResDecl is called when production compResDecl is entered.
+func (l *abuPreproc) EnterCompResDecl(ctx *parser.CompResDeclContext) {
+	typ := ctx.ID(0).GetText()
+	id := ctx.ID(1).GetText()
+	l.symbols.simple[l.device][id] = AbuType{TypeName: typ}
+	syms := l.symbols.TypeInfo(typ)
+	if syms == nil {
+		l.parseError(fmt.Errorf("custom type %s not defined", typ))
+		return
+	}
+	for r, sym := range syms {
+		l.symbols.nested[l.device][pair[string]{Fst: id, Snd: r}] = sym.Type()
 	}
 }
 
@@ -37,7 +124,7 @@ func (l *abuPreproc) ExitSimpleResource(ctx *parser.SimpleResourceContext) {
 	if !present {
 		return
 	}
-	for d := range l.devices {
+	for _, d := range l.devices {
 		if l.hasRule(d, l.rule) {
 			l.rewriter.ReplaceToken(d,
 				ctx.ID().GetSymbol(),
@@ -55,7 +142,7 @@ func (l *abuPreproc) ExitNestedResource(ctx *parser.NestedResourceContext) {
 		if !present {
 			continue
 		}
-		for d := range l.devices {
+		for _, d := range l.devices {
 			if l.hasRule(d, l.rule) {
 				l.rewriter.ReplaceToken(d,
 					ctx.ID(i).GetSymbol(),
@@ -67,28 +154,11 @@ func (l *abuPreproc) ExitNestedResource(ctx *parser.NestedResourceContext) {
 	}
 }
 
-// ExitDevice is called when production device is exited.
-func (l *abuPreproc) ExitDevice(ctx *parser.DeviceContext) {
-	devID := ctx.ID(0).GetText()
-	_, present := l.devices[devID]
-	if present {
-		l.parseError(errors.New("multiple devices share the same id"))
-	}
-	// register device
-	l.devices[devID] = l.devNumber
-	l.devNumber++
-	// track device rules
-	l.hasRules[devID] = make(map[string]struct{})
-	for i := 1; ctx.ID(i) != nil; i++ {
-		l.hasRules[devID][ctx.ID(i).GetText()] = struct{}{}
-	}
-}
-
 // EnterEcarule is called when production ecarule is entered.
 func (l *abuPreproc) EnterEcarule(ctx *parser.EcaruleContext) {
 	l.letExprs = make(map[string]string)
 	l.rule = ctx
-	for d := range l.devices {
+	for _, d := range l.devices {
 		if !l.hasRule(d, ctx) {
 			l.rewriter.DeleteToken(d, ctx.GetStart(), ctx.GetStop())
 		}
@@ -111,7 +181,7 @@ func (l *abuPreproc) ExitTask(ctx *parser.TaskContext) {
 	if ctx.ALL() != nil {
 		typ = "for all"
 	}
-	for d := range l.devices {
+	for _, d := range l.devices {
 		if l.hasRule(d, l.rule) {
 			l.rewriter.ReplaceToken(d,
 				ctx.OWISE().GetSymbol(),
@@ -124,7 +194,7 @@ func (l *abuPreproc) ExitTask(ctx *parser.TaskContext) {
 
 // ExitEcarule is called when production ecarule is exited.
 func (l *abuPreproc) ExitEcarule(ctx *parser.EcaruleContext) {
-	for d := range l.devices {
+	for _, d := range l.devices {
 		if l.hasRule(d, l.rule) {
 			if ctx.DEFAULT() != nil {
 				l.rewriter.InsertAfterToken(d, ctx.Actions().GetStop(), "for true do "+l.getTextFromContext(ctx.Actions()))
@@ -140,8 +210,8 @@ func (l *abuPreproc) ExitEcarule(ctx *parser.EcaruleContext) {
 // ExitProgram is called when production program is exited.
 func (l *abuPreproc) ExitProgram(ctx *parser.ProgramContext) {
 	for c := 0; ctx.Device(c) != nil; c++ {
-		for d, n := range l.devices {
-			if n != c {
+		for i, d := range l.devices {
+			if i != c {
 				l.rewriter.DeleteToken(d, ctx.Device(c).GetStart(), ctx.Device(c).GetStop())
 			}
 		}

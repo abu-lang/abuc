@@ -41,7 +41,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "unknown target %s\n", target)
 		os.Exit(1)
 	}
-	preprocs := preprocess(source, func(errs []error) {
+	preprocs, symbolTable := preprocess(source, func(errs []error) {
 		for _, err := range errs {
 			fmt.Fprintln(os.Stderr, err.Error())
 		}
@@ -49,7 +49,12 @@ func main() {
 	})
 	compiler := makeCompileStrategy(system, target, output)
 	for d, ts := range preprocs {
-		errs := compiler.compile(d, ts)
+		st, err := symbolTable.DeviceSymbolTable(d)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, d+":", err.Error())
+			os.Exit(3)
+		}
+		errs := compiler.compile(d, ts, st)
 		if len(errs) > 0 {
 			for _, err := range errs {
 				fmt.Fprintln(os.Stderr, d+":", err.Error())
