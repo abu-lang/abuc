@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "embed"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -37,18 +38,31 @@ func (i commonCompileInfo) outputFile(device, ext string) string {
 	return i.output + device + ext
 }
 
-func makeCompileStrategy(sys, tgt, out string) compileStrategy {
+func makeCompileStrategy(sys, tgt, out, cfg string) (compileStrategy, error) {
 	com := makeCommonCompileInfo(sys, tgt, out)
 	switch tgt {
 	case "abu":
 		return abuCompiler{
 			commonCompileInfo: com,
-		}
+		}, nil
 	case "go":
-		return goabuCompiler{
+		res := goabuCompiler{
 			commonCompileInfo: com,
 			template:          template.Must(template.New("goabu").Parse(goabuTemplate)),
 		}
+		if cfg == "" {
+			return res, nil
+		}
+		f, err := os.Open(cfg)
+		if err != nil {
+			return nil, err
+		}
+		defer f.Close()
+		err = json.NewDecoder(f).Decode(&res.config)
+		if err != nil {
+			return nil, err
+		}
+		return res, nil
 	default:
 		panic(errors.New("no compile strategy for target:" + tgt))
 	}
@@ -77,6 +91,7 @@ func (a abuCompiler) compile(device string, stream preprocessor.TrivialStream, s
 
 type goabuCompiler struct {
 	commonCompileInfo
+	config   goabuConfig
 	template *template.Template
 }
 
@@ -86,7 +101,10 @@ func (g goabuCompiler) compile(device string, stream preprocessor.TrivialStream,
 	if len(errs) > 0 {
 		return errs
 	}
-	prog := makeGoabuProgram(abup, toks)
+	prog, errs := makeGoabuProgram(abup, g.config, toks)
+	if len(errs) > 0 {
+		return errs
+	}
 	f, err := os.Create(g.outputFile(device, ".go"))
 	if err != nil {
 		return []error{err}

@@ -9,11 +9,22 @@ import (
 
 type abuProgram struct {
 	preprocessor.DeviceSymbolTable
-	id        string
-	invariant *parser.IExpressionContext
-	resources map[string]abuResource
-	rules     map[string]*parser.IEcaruleContext
-	tick      int
+	id                string
+	invariant         *parser.IExpressionContext
+	simpleResources   map[string]abuResource
+	composedResources map[string]map[string]abuResource
+	rules             map[string]*parser.IEcaruleContext
+	tick              int
+}
+
+func makeAbuProgram(st preprocessor.DeviceSymbolTable) abuProgram {
+	return abuProgram{
+		DeviceSymbolTable: st,
+		simpleResources:   make(map[string]abuResource),
+		composedResources: make(map[string]map[string]abuResource),
+		rules:             make(map[string]*parser.IEcaruleContext),
+		tick:              1,
+	}
 }
 
 type abuResource struct {
@@ -26,49 +37,57 @@ type abuParser struct {
 
 	abuProgram
 	inRuleDefs bool
+	inTask     bool
 	parseError func(error)
 }
 
 func newAbuParser(st preprocessor.DeviceSymbolTable, errorCallback func(error)) *abuParser {
-	p := abuProgram{DeviceSymbolTable: st}
-	res := &abuParser{
-		abuProgram: p,
+	return &abuParser{
+		abuProgram: makeAbuProgram(st),
 		parseError: errorCallback,
 	}
-	res.resources = make(map[string]abuResource)
-	res.rules = make(map[string]*parser.IEcaruleContext)
-	res.tick = 1
-	return res
 }
 
 // EnterResDecl is called when production resDecl is entered.
 func (p *abuParser) EnterResDecl(ctx *parser.ResDeclContext) {
-	t := preprocessor.AbuType{
-		Readable: true,
-		Writable: true,
-		TypeName: ctx.Type().GetText(),
+	if ctx.CompResDecl() != nil {
+		return
 	}
-	r := abuResource{AbuType: t}
+	id := ctx.ID().GetText()
+	sym := p.Symbol(id)
+	if sym == nil {
+		p.parseError(fmt.Errorf("resource %s missing from symbol table", id))
+		return
+	}
+	r := abuResource{AbuType: sym.Type()}
 	if ctx.Expression() != nil {
 		expr := ctx.Expression()
 		r.initExpr = &expr
 	}
-	if ctx.OUTPUT() != nil {
-		r.Readable = false
-	} else if ctx.INPUT() != nil {
-		r.Writable = false
-	}
-	p.resources[ctx.ID().GetText()] = r
+	p.simpleResources[id] = r
 }
 
-// EnterResource is called when production resource is entered.
-func (p *abuParser) EnterResource(ctx *parser.ResourceContext) {
-	if !p.inRuleDefs {
+// EnterCompResDecl is called when production compResDecl is entered.
+func (p *abuParser) EnterCompResDecl(ctx *parser.CompResDeclContext) {
+	typ := ctx.ID(0).GetText()
+	id := ctx.ID(1).GetText()
+	decls := p.TypeInfo(typ)
+	if decls == nil {
+		p.parseError(fmt.Errorf("custom type %s is undefined", typ))
 		return
 	}
-	if ctx.EXT() == nil && !p.resources[ctx.ID().GetText()].Readable {
-		p.parseError(fmt.Errorf("resource %s cannot be accessed", ctx.ID().GetText()))
+	c := make(map[string]abuResource)
+	for k, v := range decls {
+		c[k] = abuResource{AbuType: v.Type()}
 	}
+	for i := 2; ctx.ID(i) != nil; i++ {
+		resID := ctx.ID(i).GetText()
+		expr := ctx.Expression(i - 2)
+		r := c[resID]
+		r.initExpr = &expr
+		c[resID] = r
+	}
+	p.composedResources[id] = c
 }
 
 // ExitDevice is called when production device is exited.
@@ -90,22 +109,39 @@ func (p *abuParser) ExitDevice(ctx *parser.DeviceContext) {
 
 // EnterEcarule is called when production ecarule is entered.
 func (p *abuParser) EnterEcarule(ctx *parser.EcaruleContext) {
-	r, present := p.rules[ctx.ID(0).GetText()]
+	r, present := p.rules[ctx.ID().GetText()]
 	if !present {
 		return
 	}
 	if r != nil {
-		p.parseError(fmt.Errorf("rule %s has multiple definitions", ctx.ID(0).GetText()))
+		p.parseError(fmt.Errorf("rule %s has multiple definitions", ctx.ID().GetText()))
 	}
 	var rule parser.IEcaruleContext = ctx
-	p.rules[ctx.ID(0).GetText()] = &rule
+	p.rules[ctx.ID().GetText()] = &rule
 }
 
-// EnterAssignment is called when production assignment is entered.
-func (p *abuParser) EnterAssignment(ctx *parser.AssignmentContext) {
-	if ctx.EXT() == nil && !p.resources[ctx.ID().GetText()].Writable {
-		p.parseError(fmt.Errorf("resource %s cannot be modified", ctx.ID().GetText()))
+// ExitSimpleResource is called when production simpleResource is exited.
+func (p *abuParser) ExitSimpleResource(ctx *parser.SimpleResourceContext) {
+	if !p.inTask && ctx.EXT() != nil {
+		p.parseError(fmt.Errorf("resource %s cannot be remote in this context", ctx.ID().GetText()))
 	}
+}
+
+// ExitNestedResource is called when production nestedResource is exited.
+func (p *abuParser) ExitNestedResource(ctx *parser.NestedResourceContext) {
+	if !p.inTask && ctx.EXT() != nil {
+		p.parseError(fmt.Errorf("resource %s[%s] cannot be remote in this context", ctx.ID(0).GetText(), ctx.ID(1).GetText()))
+	}
+}
+
+// EnterTask is called when production task is entered.
+func (p *abuParser) EnterTask(ctx *parser.TaskContext) {
+	p.inTask = true
+}
+
+// ExitTask is called when production task is exited.
+func (p *abuParser) ExitTask(ctx *parser.TaskContext) {
+	p.inTask = false
 }
 
 // ExitProgram is called when production program is exited.

@@ -10,6 +10,12 @@ type AbuParserListener interface {
 	// EnterProgram is called when entering the program production.
 	EnterProgram(c *ProgramContext)
 
+	// EnterTypeDecl is called when entering the typeDecl production.
+	EnterTypeDecl(c *TypeDeclContext)
+
+	// EnterResField is called when entering the resField production.
+	EnterResField(c *ResFieldContext)
+
 	// EnterDevice is called when entering the device production.
 	EnterDevice(c *DeviceContext)
 
@@ -18,6 +24,9 @@ type AbuParserListener interface {
 
 	// EnterResDecl is called when entering the resDecl production.
 	EnterResDecl(c *ResDeclContext)
+
+	// EnterCompResDecl is called when entering the compResDecl production.
+	EnterCompResDecl(c *CompResDeclContext)
 
 	// EnterType is called when entering the type production.
 	EnterType(c *TypeContext)
@@ -55,6 +64,12 @@ type AbuParserListener interface {
 	// EnterResource is called when entering the resource production.
 	EnterResource(c *ResourceContext)
 
+	// EnterSimpleResource is called when entering the simpleResource production.
+	EnterSimpleResource(c *SimpleResourceContext)
+
+	// EnterNestedResource is called when entering the nestedResource production.
+	EnterNestedResource(c *NestedResourceContext)
+
 	// EnterDecimalLiteral is called when entering the decimalLiteral production.
 	EnterDecimalLiteral(c *DecimalLiteralContext)
 
@@ -70,6 +85,12 @@ type AbuParserListener interface {
 	// ExitProgram is called when exiting the program production.
 	ExitProgram(c *ProgramContext)
 
+	// ExitTypeDecl is called when exiting the typeDecl production.
+	ExitTypeDecl(c *TypeDeclContext)
+
+	// ExitResField is called when exiting the resField production.
+	ExitResField(c *ResFieldContext)
+
 	// ExitDevice is called when exiting the device production.
 	ExitDevice(c *DeviceContext)
 
@@ -78,6 +99,9 @@ type AbuParserListener interface {
 
 	// ExitResDecl is called when exiting the resDecl production.
 	ExitResDecl(c *ResDeclContext)
+
+	// ExitCompResDecl is called when exiting the compResDecl production.
+	ExitCompResDecl(c *CompResDeclContext)
 
 	// ExitType is called when exiting the type production.
 	ExitType(c *TypeContext)
@@ -114,6 +138,12 @@ type AbuParserListener interface {
 
 	// ExitResource is called when exiting the resource production.
 	ExitResource(c *ResourceContext)
+
+	// ExitSimpleResource is called when exiting the simpleResource production.
+	ExitSimpleResource(c *SimpleResourceContext)
+
+	// ExitNestedResource is called when exiting the nestedResource production.
+	ExitNestedResource(c *NestedResourceContext)
 
 	// ExitDecimalLiteral is called when exiting the decimalLiteral production.
 	ExitDecimalLiteral(c *DecimalLiteralContext)

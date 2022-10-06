@@ -10,10 +10,13 @@ import (
 
 func main() {
 	flag.Usage = func() { printUsage(flag.CommandLine.Output()) }
+	config := ""
 	output := ""
 	system := runtime.GOOS
 	target := runtime.GOARCH
 	version_opt := false
+	flag.StringVar(&config, "config", config, "configuration file for target")
+	flag.StringVar(&config, "c", config, "configuration file for target")
 	flag.StringVar(&output, "output", output, "output file name for the compiled source")
 	flag.StringVar(&output, "o", output, "output file name for the compiled source")
 	flag.StringVar(&system, "system", system, "target operating system")
@@ -47,19 +50,23 @@ func main() {
 		}
 		os.Exit(2)
 	})
-	compiler := makeCompileStrategy(system, target, output)
+	compiler, err := makeCompileStrategy(system, target, output, config)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(4)
+	}
 	for d, ts := range preprocs {
 		st, err := symbolTable.DeviceSymbolTable(d)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, d+":", err.Error())
-			os.Exit(3)
+			os.Exit(4)
 		}
 		errs := compiler.compile(d, ts, st)
 		if len(errs) > 0 {
 			for _, err := range errs {
 				fmt.Fprintln(os.Stderr, d+":", err.Error())
 			}
-			os.Exit(3)
+			os.Exit(4)
 		}
 	}
 }
@@ -99,6 +106,7 @@ func printUsage(out io.Writer) error {
 // fields. It should be called after flag.Parse().
 func getFlagInfos() []flagInfo {
 	longFlag := map[string]string{
+		"c": "config",
 		"o": "output",
 		"s": "system",
 		"t": "target",

@@ -9,7 +9,8 @@ import (
     "github.com/abu-lang/goabu"
     "github.com/abu-lang/goabu/communication"
     "github.com/abu-lang/goabu/config"
-    "github.com/abu-lang/goabu/memory"
+    {{range .Imports}}"{{.}}"
+    {{end}}
 )
 
 var port_opt = flag.Int("port", 0, "set listening port")
@@ -18,7 +19,7 @@ var join_opt = flag.String("join", "", "set nodes (\"host:port,...\") to join")
 func main() {
     flag.Parse()
 
-    dev_state := memory.MakeResources()
+    dev_state := {{.StateInitializer}}
     {{range .Resources}}dev_state{{.}}
     {{end}}
     knowledge_base := []string{
