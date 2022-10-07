@@ -63,7 +63,8 @@ assignment
     ;
 
 expression
-    : ABS expression
+    : ABSINT expression
+    | ABSDEC expression
     | NOT expression
     | expression mulDivModOperator expression
     | expression plusMinusOperator expression

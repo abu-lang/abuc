@@ -4,8 +4,9 @@ AND             : 'and' ;
 OR              : 'or'  ;
 NOT             : 'not' ;
 
-ABS             : 'abs' ;
-DOT             : '.'   ;
+ABSINT          : 'absint' ;
+ABSDEC          : 'absdec' ;
+DOT             : '.'      ;
 
 PLUS            : '+' ;
 MINUS           : '-' ;

@@ -159,8 +159,11 @@ func (t *abuRewriter) ExitExpression(ctx *parser.ExpressionContext) {
 		t.rewriter.ReplaceTokenDefaultPos(ctx.NOT().GetSymbol(), "!")
 	case ctx.DOUBLECOLON() != nil:
 		t.rewriter.ReplaceTokenDefaultPos(ctx.DOUBLECOLON().GetSymbol(), "+")
-	case ctx.ABS() != nil: // Note that Abs() always returns float64
-		t.rewriter.ReplaceTokenDefaultPos(ctx.ABS().GetSymbol(), "Abs(")
+	case ctx.ABSINT() != nil:
+		t.rewriter.ReplaceTokenDefaultPos(ctx.ABSINT().GetSymbol(), "AbsInt(")
+		t.rewriter.InsertAfterToken("default", ctx.Expression(0).GetStop(), ")")
+	case ctx.ABSDEC() != nil:
+		t.rewriter.ReplaceTokenDefaultPos(ctx.ABSDEC().GetSymbol(), "Abs(")
 		t.rewriter.InsertAfterToken("default", ctx.Expression(0).GetStop(), ")")
 	}
 }

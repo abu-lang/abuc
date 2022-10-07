@@ -32,23 +32,24 @@ var sugaredabuparserParserStaticData struct {
 func sugaredabuparserParserInit() {
 	staticData := &sugaredabuparserParserStaticData
 	staticData.literalNames = []string{
-		"", "'and'", "'or'", "'not'", "'abs'", "'.'", "'+'", "'-'", "'/'", "'*'",
-		"'%'", "'=='", "'>'", "'<'", "'>='", "'<='", "'!='", "'::'", "':'",
-		"';'", "':='", "'='", "','", "'('", "')'", "'['", "']'", "'{'", "'}'",
-		"'has'", "'where'", "'physical'", "'logical'", "'input'", "'output'",
-		"'rule'", "", "", "'on'", "'let'", "'in'", "'default'", "'for'", "'all'",
-		"'do'", "'owise'", "'define'", "'as'", "'boolean'", "'integer'", "'decimal'",
-		"'string'", "'true'", "'false'",
+		"", "'and'", "'or'", "'not'", "'absint'", "'absdec'", "'.'", "'+'",
+		"'-'", "'/'", "'*'", "'%'", "'=='", "'>'", "'<'", "'>='", "'<='", "'!='",
+		"'::'", "':'", "';'", "':='", "'='", "','", "'('", "')'", "'['", "']'",
+		"'{'", "'}'", "'has'", "'where'", "'physical'", "'logical'", "'input'",
+		"'output'", "'rule'", "", "", "'on'", "'let'", "'in'", "'default'",
+		"'for'", "'all'", "'do'", "'owise'", "'define'", "'as'", "'boolean'",
+		"'integer'", "'decimal'", "'string'", "'true'", "'false'",
 	}
 	staticData.symbolicNames = []string{
-		"", "AND", "OR", "NOT", "ABS", "DOT", "PLUS", "MINUS", "DIV", "MUL",
-		"MOD", "EQUALS", "GT", "LT", "GTE", "LTE", "NOTEQUALS", "DOUBLECOLON",
-		"COLON", "SEMICOLON", "COLONEQUAL", "EQUALSIGN", "COMMA", "RL_BRACKET",
-		"RR_BRACKET", "SL_BRACKET", "SR_BRACKET", "CL_BRACKET", "CR_BRACKET",
-		"HAS", "WHERE", "PHYSICAL", "LOGICAL", "INPUT", "OUTPUT", "RULE", "THIS",
-		"EXT", "ON", "LET", "IN", "DEFAULT", "FOR", "ALL", "DO", "OWISE", "DEFINE",
-		"AS", "BOOLEAN", "INTEGER", "DECIMAL", "STRING", "TRUE", "FALSE", "ID",
-		"QUOTED_STRING", "DEC_LITERAL", "INT_LITERAL", "WS", "COMMENT", "LINE_COMMENT",
+		"", "AND", "OR", "NOT", "ABSINT", "ABSDEC", "DOT", "PLUS", "MINUS",
+		"DIV", "MUL", "MOD", "EQUALS", "GT", "LT", "GTE", "LTE", "NOTEQUALS",
+		"DOUBLECOLON", "COLON", "SEMICOLON", "COLONEQUAL", "EQUALSIGN", "COMMA",
+		"RL_BRACKET", "RR_BRACKET", "SL_BRACKET", "SR_BRACKET", "CL_BRACKET",
+		"CR_BRACKET", "HAS", "WHERE", "PHYSICAL", "LOGICAL", "INPUT", "OUTPUT",
+		"RULE", "THIS", "EXT", "ON", "LET", "IN", "DEFAULT", "FOR", "ALL", "DO",
+		"OWISE", "DEFINE", "AS", "BOOLEAN", "INTEGER", "DECIMAL", "STRING",
+		"TRUE", "FALSE", "ID", "QUOTED_STRING", "DEC_LITERAL", "INT_LITERAL",
+		"WS", "COMMENT", "LINE_COMMENT",
 	}
 	staticData.ruleNames = []string{
 		"program", "typeDecl", "resField", "device", "resList", "resDecl", "compResDecl",
@@ -59,7 +60,7 @@ func sugaredabuparserParserInit() {
 	}
 	staticData.predictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 60, 344, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 61, 346, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
 		10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 2, 14, 7, 14, 2, 15, 7, 15,
 		2, 16, 7, 16, 2, 17, 7, 17, 2, 18, 7, 18, 2, 19, 7, 19, 2, 20, 7, 20, 2,
@@ -84,132 +85,133 @@ func sugaredabuparserParserInit() {
 		1, 10, 3, 10, 228, 8, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 3,
 		10, 236, 8, 10, 1, 11, 1, 11, 1, 11, 5, 11, 241, 8, 11, 10, 11, 12, 11,
 		244, 9, 11, 1, 12, 1, 12, 1, 12, 1, 12, 1, 13, 1, 13, 1, 13, 1, 13, 1,
-		13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 3, 13, 260, 8, 13, 1, 13, 1, 13,
+		13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 3, 13, 262, 8, 13,
 		1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1,
-		13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 5, 13, 283,
-		8, 13, 10, 13, 12, 13, 286, 9, 13, 1, 14, 1, 14, 1, 15, 1, 15, 1, 16, 1,
-		16, 1, 17, 1, 17, 3, 17, 296, 8, 17, 1, 18, 1, 18, 1, 18, 1, 18, 3, 18,
-		302, 8, 18, 1, 19, 1, 19, 3, 19, 306, 8, 19, 1, 20, 3, 20, 309, 8, 20,
-		1, 20, 1, 20, 1, 20, 3, 20, 314, 8, 20, 1, 21, 3, 21, 317, 8, 21, 1, 21,
-		1, 21, 1, 21, 1, 21, 1, 21, 1, 21, 1, 21, 1, 21, 1, 21, 3, 21, 328, 8,
-		21, 1, 22, 3, 22, 331, 8, 22, 1, 22, 1, 22, 1, 23, 3, 23, 336, 8, 23, 1,
-		23, 1, 23, 1, 24, 1, 24, 1, 25, 1, 25, 1, 25, 0, 1, 26, 26, 0, 2, 4, 6,
-		8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42,
-		44, 46, 48, 50, 0, 5, 1, 0, 48, 51, 1, 0, 8, 10, 1, 0, 6, 7, 1, 0, 11,
-		16, 1, 0, 52, 53, 364, 0, 55, 1, 0, 0, 0, 2, 69, 1, 0, 0, 0, 4, 94, 1,
-		0, 0, 0, 6, 96, 1, 0, 0, 0, 8, 115, 1, 0, 0, 0, 10, 138, 1, 0, 0, 0, 12,
-		140, 1, 0, 0, 0, 14, 160, 1, 0, 0, 0, 16, 203, 1, 0, 0, 0, 18, 205, 1,
-		0, 0, 0, 20, 235, 1, 0, 0, 0, 22, 237, 1, 0, 0, 0, 24, 245, 1, 0, 0, 0,
-		26, 259, 1, 0, 0, 0, 28, 287, 1, 0, 0, 0, 30, 289, 1, 0, 0, 0, 32, 291,
-		1, 0, 0, 0, 34, 295, 1, 0, 0, 0, 36, 301, 1, 0, 0, 0, 38, 305, 1, 0, 0,
-		0, 40, 313, 1, 0, 0, 0, 42, 327, 1, 0, 0, 0, 44, 330, 1, 0, 0, 0, 46, 335,
-		1, 0, 0, 0, 48, 339, 1, 0, 0, 0, 50, 341, 1, 0, 0, 0, 52, 54, 3, 2, 1,
+		13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13,
+		5, 13, 285, 8, 13, 10, 13, 12, 13, 288, 9, 13, 1, 14, 1, 14, 1, 15, 1,
+		15, 1, 16, 1, 16, 1, 17, 1, 17, 3, 17, 298, 8, 17, 1, 18, 1, 18, 1, 18,
+		1, 18, 3, 18, 304, 8, 18, 1, 19, 1, 19, 3, 19, 308, 8, 19, 1, 20, 3, 20,
+		311, 8, 20, 1, 20, 1, 20, 1, 20, 3, 20, 316, 8, 20, 1, 21, 3, 21, 319,
+		8, 21, 1, 21, 1, 21, 1, 21, 1, 21, 1, 21, 1, 21, 1, 21, 1, 21, 1, 21, 3,
+		21, 330, 8, 21, 1, 22, 3, 22, 333, 8, 22, 1, 22, 1, 22, 1, 23, 3, 23, 338,
+		8, 23, 1, 23, 1, 23, 1, 24, 1, 24, 1, 25, 1, 25, 1, 25, 0, 1, 26, 26, 0,
+		2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38,
+		40, 42, 44, 46, 48, 50, 0, 5, 1, 0, 49, 52, 1, 0, 9, 11, 1, 0, 7, 8, 1,
+		0, 12, 17, 1, 0, 53, 54, 367, 0, 55, 1, 0, 0, 0, 2, 69, 1, 0, 0, 0, 4,
+		94, 1, 0, 0, 0, 6, 96, 1, 0, 0, 0, 8, 115, 1, 0, 0, 0, 10, 138, 1, 0, 0,
+		0, 12, 140, 1, 0, 0, 0, 14, 160, 1, 0, 0, 0, 16, 203, 1, 0, 0, 0, 18, 205,
+		1, 0, 0, 0, 20, 235, 1, 0, 0, 0, 22, 237, 1, 0, 0, 0, 24, 245, 1, 0, 0,
+		0, 26, 261, 1, 0, 0, 0, 28, 289, 1, 0, 0, 0, 30, 291, 1, 0, 0, 0, 32, 293,
+		1, 0, 0, 0, 34, 297, 1, 0, 0, 0, 36, 303, 1, 0, 0, 0, 38, 307, 1, 0, 0,
+		0, 40, 315, 1, 0, 0, 0, 42, 329, 1, 0, 0, 0, 44, 332, 1, 0, 0, 0, 46, 337,
+		1, 0, 0, 0, 48, 341, 1, 0, 0, 0, 50, 343, 1, 0, 0, 0, 52, 54, 3, 2, 1,
 		0, 53, 52, 1, 0, 0, 0, 54, 57, 1, 0, 0, 0, 55, 53, 1, 0, 0, 0, 55, 56,
 		1, 0, 0, 0, 56, 59, 1, 0, 0, 0, 57, 55, 1, 0, 0, 0, 58, 60, 3, 6, 3, 0,
 		59, 58, 1, 0, 0, 0, 60, 61, 1, 0, 0, 0, 61, 59, 1, 0, 0, 0, 61, 62, 1,
 		0, 0, 0, 62, 66, 1, 0, 0, 0, 63, 65, 3, 16, 8, 0, 64, 63, 1, 0, 0, 0, 65,
 		68, 1, 0, 0, 0, 66, 64, 1, 0, 0, 0, 66, 67, 1, 0, 0, 0, 67, 1, 1, 0, 0,
-		0, 68, 66, 1, 0, 0, 0, 69, 70, 5, 46, 0, 0, 70, 71, 5, 54, 0, 0, 71, 72,
-		5, 47, 0, 0, 72, 74, 5, 27, 0, 0, 73, 75, 3, 4, 2, 0, 74, 73, 1, 0, 0,
+		0, 68, 66, 1, 0, 0, 0, 69, 70, 5, 47, 0, 0, 70, 71, 5, 55, 0, 0, 71, 72,
+		5, 48, 0, 0, 72, 74, 5, 28, 0, 0, 73, 75, 3, 4, 2, 0, 74, 73, 1, 0, 0,
 		0, 75, 76, 1, 0, 0, 0, 76, 74, 1, 0, 0, 0, 76, 77, 1, 0, 0, 0, 77, 78,
-		1, 0, 0, 0, 78, 79, 5, 28, 0, 0, 79, 3, 1, 0, 0, 0, 80, 81, 5, 54, 0, 0,
-		81, 82, 5, 18, 0, 0, 82, 83, 5, 31, 0, 0, 83, 84, 5, 34, 0, 0, 84, 95,
-		3, 14, 7, 0, 85, 86, 5, 54, 0, 0, 86, 87, 5, 18, 0, 0, 87, 88, 5, 31, 0,
-		0, 88, 89, 5, 33, 0, 0, 89, 95, 3, 14, 7, 0, 90, 91, 5, 54, 0, 0, 91, 92,
-		5, 18, 0, 0, 92, 93, 5, 32, 0, 0, 93, 95, 3, 14, 7, 0, 94, 80, 1, 0, 0,
+		1, 0, 0, 0, 78, 79, 5, 29, 0, 0, 79, 3, 1, 0, 0, 0, 80, 81, 5, 55, 0, 0,
+		81, 82, 5, 19, 0, 0, 82, 83, 5, 32, 0, 0, 83, 84, 5, 35, 0, 0, 84, 95,
+		3, 14, 7, 0, 85, 86, 5, 55, 0, 0, 86, 87, 5, 19, 0, 0, 87, 88, 5, 32, 0,
+		0, 88, 89, 5, 34, 0, 0, 89, 95, 3, 14, 7, 0, 90, 91, 5, 55, 0, 0, 91, 92,
+		5, 19, 0, 0, 92, 93, 5, 33, 0, 0, 93, 95, 3, 14, 7, 0, 94, 80, 1, 0, 0,
 		0, 94, 85, 1, 0, 0, 0, 94, 90, 1, 0, 0, 0, 95, 5, 1, 0, 0, 0, 96, 97, 5,
-		54, 0, 0, 97, 98, 5, 18, 0, 0, 98, 99, 3, 48, 24, 0, 99, 100, 5, 27, 0,
-		0, 100, 103, 3, 8, 4, 0, 101, 102, 5, 30, 0, 0, 102, 104, 3, 26, 13, 0,
+		55, 0, 0, 97, 98, 5, 19, 0, 0, 98, 99, 3, 48, 24, 0, 99, 100, 5, 28, 0,
+		0, 100, 103, 3, 8, 4, 0, 101, 102, 5, 31, 0, 0, 102, 104, 3, 26, 13, 0,
 		103, 101, 1, 0, 0, 0, 103, 104, 1, 0, 0, 0, 104, 105, 1, 0, 0, 0, 105,
-		112, 5, 28, 0, 0, 106, 108, 5, 29, 0, 0, 107, 109, 5, 54, 0, 0, 108, 107,
+		112, 5, 29, 0, 0, 106, 108, 5, 30, 0, 0, 107, 109, 5, 55, 0, 0, 108, 107,
 		1, 0, 0, 0, 109, 110, 1, 0, 0, 0, 110, 108, 1, 0, 0, 0, 110, 111, 1, 0,
 		0, 0, 111, 113, 1, 0, 0, 0, 112, 106, 1, 0, 0, 0, 112, 113, 1, 0, 0, 0,
 		113, 7, 1, 0, 0, 0, 114, 116, 3, 10, 5, 0, 115, 114, 1, 0, 0, 0, 116, 117,
 		1, 0, 0, 0, 117, 115, 1, 0, 0, 0, 117, 118, 1, 0, 0, 0, 118, 9, 1, 0, 0,
-		0, 119, 120, 5, 31, 0, 0, 120, 121, 5, 34, 0, 0, 121, 122, 3, 14, 7, 0,
-		122, 123, 5, 54, 0, 0, 123, 124, 5, 21, 0, 0, 124, 125, 3, 26, 13, 0, 125,
-		139, 1, 0, 0, 0, 126, 127, 5, 31, 0, 0, 127, 128, 5, 33, 0, 0, 128, 129,
-		3, 14, 7, 0, 129, 130, 5, 54, 0, 0, 130, 139, 1, 0, 0, 0, 131, 132, 5,
-		32, 0, 0, 132, 133, 3, 14, 7, 0, 133, 134, 5, 54, 0, 0, 134, 135, 5, 21,
+		0, 119, 120, 5, 32, 0, 0, 120, 121, 5, 35, 0, 0, 121, 122, 3, 14, 7, 0,
+		122, 123, 5, 55, 0, 0, 123, 124, 5, 22, 0, 0, 124, 125, 3, 26, 13, 0, 125,
+		139, 1, 0, 0, 0, 126, 127, 5, 32, 0, 0, 127, 128, 5, 34, 0, 0, 128, 129,
+		3, 14, 7, 0, 129, 130, 5, 55, 0, 0, 130, 139, 1, 0, 0, 0, 131, 132, 5,
+		33, 0, 0, 132, 133, 3, 14, 7, 0, 133, 134, 5, 55, 0, 0, 134, 135, 5, 22,
 		0, 0, 135, 136, 3, 26, 13, 0, 136, 139, 1, 0, 0, 0, 137, 139, 3, 12, 6,
 		0, 138, 119, 1, 0, 0, 0, 138, 126, 1, 0, 0, 0, 138, 131, 1, 0, 0, 0, 138,
-		137, 1, 0, 0, 0, 139, 11, 1, 0, 0, 0, 140, 141, 5, 54, 0, 0, 141, 158,
-		5, 54, 0, 0, 142, 143, 5, 21, 0, 0, 143, 144, 5, 23, 0, 0, 144, 145, 5,
-		54, 0, 0, 145, 146, 5, 21, 0, 0, 146, 153, 3, 26, 13, 0, 147, 148, 5, 22,
-		0, 0, 148, 149, 5, 54, 0, 0, 149, 150, 5, 21, 0, 0, 150, 152, 3, 26, 13,
+		137, 1, 0, 0, 0, 139, 11, 1, 0, 0, 0, 140, 141, 5, 55, 0, 0, 141, 158,
+		5, 55, 0, 0, 142, 143, 5, 22, 0, 0, 143, 144, 5, 24, 0, 0, 144, 145, 5,
+		55, 0, 0, 145, 146, 5, 22, 0, 0, 146, 153, 3, 26, 13, 0, 147, 148, 5, 23,
+		0, 0, 148, 149, 5, 55, 0, 0, 149, 150, 5, 22, 0, 0, 150, 152, 3, 26, 13,
 		0, 151, 147, 1, 0, 0, 0, 152, 155, 1, 0, 0, 0, 153, 151, 1, 0, 0, 0, 153,
 		154, 1, 0, 0, 0, 154, 156, 1, 0, 0, 0, 155, 153, 1, 0, 0, 0, 156, 157,
-		5, 24, 0, 0, 157, 159, 1, 0, 0, 0, 158, 142, 1, 0, 0, 0, 158, 159, 1, 0,
+		5, 25, 0, 0, 157, 159, 1, 0, 0, 0, 158, 142, 1, 0, 0, 0, 158, 159, 1, 0,
 		0, 0, 159, 13, 1, 0, 0, 0, 160, 161, 7, 0, 0, 0, 161, 15, 1, 0, 0, 0, 162,
-		163, 5, 35, 0, 0, 163, 164, 5, 54, 0, 0, 164, 166, 5, 38, 0, 0, 165, 167,
+		163, 5, 36, 0, 0, 163, 164, 5, 55, 0, 0, 164, 166, 5, 39, 0, 0, 165, 167,
 		3, 38, 19, 0, 166, 165, 1, 0, 0, 0, 167, 168, 1, 0, 0, 0, 168, 166, 1,
-		0, 0, 0, 168, 169, 1, 0, 0, 0, 169, 174, 1, 0, 0, 0, 170, 171, 5, 39, 0,
-		0, 171, 172, 3, 18, 9, 0, 172, 173, 5, 40, 0, 0, 173, 175, 1, 0, 0, 0,
+		0, 0, 0, 168, 169, 1, 0, 0, 0, 169, 174, 1, 0, 0, 0, 170, 171, 5, 40, 0,
+		0, 171, 172, 3, 18, 9, 0, 172, 173, 5, 41, 0, 0, 173, 175, 1, 0, 0, 0,
 		174, 170, 1, 0, 0, 0, 174, 175, 1, 0, 0, 0, 175, 177, 1, 0, 0, 0, 176,
 		178, 3, 20, 10, 0, 177, 176, 1, 0, 0, 0, 178, 179, 1, 0, 0, 0, 179, 177,
-		1, 0, 0, 0, 179, 180, 1, 0, 0, 0, 180, 204, 1, 0, 0, 0, 181, 182, 5, 35,
-		0, 0, 182, 183, 5, 54, 0, 0, 183, 185, 5, 38, 0, 0, 184, 186, 3, 38, 19,
+		1, 0, 0, 0, 179, 180, 1, 0, 0, 0, 180, 204, 1, 0, 0, 0, 181, 182, 5, 36,
+		0, 0, 182, 183, 5, 55, 0, 0, 183, 185, 5, 39, 0, 0, 184, 186, 3, 38, 19,
 		0, 185, 184, 1, 0, 0, 0, 186, 187, 1, 0, 0, 0, 187, 185, 1, 0, 0, 0, 187,
-		188, 1, 0, 0, 0, 188, 189, 1, 0, 0, 0, 189, 190, 5, 41, 0, 0, 190, 195,
-		3, 22, 11, 0, 191, 192, 5, 39, 0, 0, 192, 193, 3, 18, 9, 0, 193, 194, 5,
-		40, 0, 0, 194, 196, 1, 0, 0, 0, 195, 191, 1, 0, 0, 0, 195, 196, 1, 0, 0,
+		188, 1, 0, 0, 0, 188, 189, 1, 0, 0, 0, 189, 190, 5, 42, 0, 0, 190, 195,
+		3, 22, 11, 0, 191, 192, 5, 40, 0, 0, 192, 193, 3, 18, 9, 0, 193, 194, 5,
+		41, 0, 0, 194, 196, 1, 0, 0, 0, 195, 191, 1, 0, 0, 0, 195, 196, 1, 0, 0,
 		0, 196, 200, 1, 0, 0, 0, 197, 199, 3, 20, 10, 0, 198, 197, 1, 0, 0, 0,
 		199, 202, 1, 0, 0, 0, 200, 198, 1, 0, 0, 0, 200, 201, 1, 0, 0, 0, 201,
 		204, 1, 0, 0, 0, 202, 200, 1, 0, 0, 0, 203, 162, 1, 0, 0, 0, 203, 181,
-		1, 0, 0, 0, 204, 17, 1, 0, 0, 0, 205, 206, 5, 54, 0, 0, 206, 207, 5, 20,
-		0, 0, 207, 214, 3, 26, 13, 0, 208, 209, 5, 19, 0, 0, 209, 210, 5, 54, 0,
-		0, 210, 211, 5, 20, 0, 0, 211, 213, 3, 26, 13, 0, 212, 208, 1, 0, 0, 0,
+		1, 0, 0, 0, 204, 17, 1, 0, 0, 0, 205, 206, 5, 55, 0, 0, 206, 207, 5, 21,
+		0, 0, 207, 214, 3, 26, 13, 0, 208, 209, 5, 20, 0, 0, 209, 210, 5, 55, 0,
+		0, 210, 211, 5, 21, 0, 0, 211, 213, 3, 26, 13, 0, 212, 208, 1, 0, 0, 0,
 		213, 216, 1, 0, 0, 0, 214, 212, 1, 0, 0, 0, 214, 215, 1, 0, 0, 0, 215,
-		19, 1, 0, 0, 0, 216, 214, 1, 0, 0, 0, 217, 219, 5, 42, 0, 0, 218, 220,
-		5, 43, 0, 0, 219, 218, 1, 0, 0, 0, 219, 220, 1, 0, 0, 0, 220, 221, 1, 0,
-		0, 0, 221, 222, 3, 26, 13, 0, 222, 223, 5, 44, 0, 0, 223, 224, 3, 22, 11,
-		0, 224, 236, 1, 0, 0, 0, 225, 227, 5, 42, 0, 0, 226, 228, 5, 43, 0, 0,
+		19, 1, 0, 0, 0, 216, 214, 1, 0, 0, 0, 217, 219, 5, 43, 0, 0, 218, 220,
+		5, 44, 0, 0, 219, 218, 1, 0, 0, 0, 219, 220, 1, 0, 0, 0, 220, 221, 1, 0,
+		0, 0, 221, 222, 3, 26, 13, 0, 222, 223, 5, 45, 0, 0, 223, 224, 3, 22, 11,
+		0, 224, 236, 1, 0, 0, 0, 225, 227, 5, 43, 0, 0, 226, 228, 5, 44, 0, 0,
 		227, 226, 1, 0, 0, 0, 227, 228, 1, 0, 0, 0, 228, 229, 1, 0, 0, 0, 229,
-		230, 3, 26, 13, 0, 230, 231, 5, 44, 0, 0, 231, 232, 3, 22, 11, 0, 232,
-		233, 5, 45, 0, 0, 233, 234, 3, 22, 11, 0, 234, 236, 1, 0, 0, 0, 235, 217,
+		230, 3, 26, 13, 0, 230, 231, 5, 45, 0, 0, 231, 232, 3, 22, 11, 0, 232,
+		233, 5, 46, 0, 0, 233, 234, 3, 22, 11, 0, 234, 236, 1, 0, 0, 0, 235, 217,
 		1, 0, 0, 0, 235, 225, 1, 0, 0, 0, 236, 21, 1, 0, 0, 0, 237, 242, 3, 24,
-		12, 0, 238, 239, 5, 19, 0, 0, 239, 241, 3, 24, 12, 0, 240, 238, 1, 0, 0,
+		12, 0, 238, 239, 5, 20, 0, 0, 239, 241, 3, 24, 12, 0, 240, 238, 1, 0, 0,
 		0, 241, 244, 1, 0, 0, 0, 242, 240, 1, 0, 0, 0, 242, 243, 1, 0, 0, 0, 243,
 		23, 1, 0, 0, 0, 244, 242, 1, 0, 0, 0, 245, 246, 3, 38, 19, 0, 246, 247,
-		5, 21, 0, 0, 247, 248, 3, 26, 13, 0, 248, 25, 1, 0, 0, 0, 249, 250, 6,
-		13, -1, 0, 250, 251, 5, 4, 0, 0, 251, 260, 3, 26, 13, 10, 252, 253, 5,
-		3, 0, 0, 253, 260, 3, 26, 13, 9, 254, 255, 5, 23, 0, 0, 255, 256, 3, 26,
-		13, 0, 256, 257, 5, 24, 0, 0, 257, 260, 1, 0, 0, 0, 258, 260, 3, 34, 17,
-		0, 259, 249, 1, 0, 0, 0, 259, 252, 1, 0, 0, 0, 259, 254, 1, 0, 0, 0, 259,
-		258, 1, 0, 0, 0, 260, 284, 1, 0, 0, 0, 261, 262, 10, 8, 0, 0, 262, 263,
-		3, 28, 14, 0, 263, 264, 3, 26, 13, 9, 264, 283, 1, 0, 0, 0, 265, 266, 10,
-		7, 0, 0, 266, 267, 3, 30, 15, 0, 267, 268, 3, 26, 13, 8, 268, 283, 1, 0,
-		0, 0, 269, 270, 10, 6, 0, 0, 270, 271, 3, 32, 16, 0, 271, 272, 3, 26, 13,
-		7, 272, 283, 1, 0, 0, 0, 273, 274, 10, 5, 0, 0, 274, 275, 5, 17, 0, 0,
-		275, 283, 3, 26, 13, 6, 276, 277, 10, 4, 0, 0, 277, 278, 5, 1, 0, 0, 278,
-		283, 3, 26, 13, 5, 279, 280, 10, 3, 0, 0, 280, 281, 5, 2, 0, 0, 281, 283,
-		3, 26, 13, 4, 282, 261, 1, 0, 0, 0, 282, 265, 1, 0, 0, 0, 282, 269, 1,
-		0, 0, 0, 282, 273, 1, 0, 0, 0, 282, 276, 1, 0, 0, 0, 282, 279, 1, 0, 0,
-		0, 283, 286, 1, 0, 0, 0, 284, 282, 1, 0, 0, 0, 284, 285, 1, 0, 0, 0, 285,
-		27, 1, 0, 0, 0, 286, 284, 1, 0, 0, 0, 287, 288, 7, 1, 0, 0, 288, 29, 1,
-		0, 0, 0, 289, 290, 7, 2, 0, 0, 290, 31, 1, 0, 0, 0, 291, 292, 7, 3, 0,
-		0, 292, 33, 1, 0, 0, 0, 293, 296, 3, 36, 18, 0, 294, 296, 3, 38, 19, 0,
-		295, 293, 1, 0, 0, 0, 295, 294, 1, 0, 0, 0, 296, 35, 1, 0, 0, 0, 297, 302,
-		3, 48, 24, 0, 298, 302, 3, 46, 23, 0, 299, 302, 3, 44, 22, 0, 300, 302,
-		3, 50, 25, 0, 301, 297, 1, 0, 0, 0, 301, 298, 1, 0, 0, 0, 301, 299, 1,
-		0, 0, 0, 301, 300, 1, 0, 0, 0, 302, 37, 1, 0, 0, 0, 303, 306, 3, 40, 20,
-		0, 304, 306, 3, 42, 21, 0, 305, 303, 1, 0, 0, 0, 305, 304, 1, 0, 0, 0,
-		306, 39, 1, 0, 0, 0, 307, 309, 5, 36, 0, 0, 308, 307, 1, 0, 0, 0, 308,
-		309, 1, 0, 0, 0, 309, 310, 1, 0, 0, 0, 310, 314, 5, 54, 0, 0, 311, 312,
-		5, 37, 0, 0, 312, 314, 5, 54, 0, 0, 313, 308, 1, 0, 0, 0, 313, 311, 1,
-		0, 0, 0, 314, 41, 1, 0, 0, 0, 315, 317, 5, 36, 0, 0, 316, 315, 1, 0, 0,
-		0, 316, 317, 1, 0, 0, 0, 317, 318, 1, 0, 0, 0, 318, 319, 5, 54, 0, 0, 319,
-		320, 5, 25, 0, 0, 320, 321, 5, 54, 0, 0, 321, 328, 5, 26, 0, 0, 322, 323,
-		5, 37, 0, 0, 323, 324, 5, 54, 0, 0, 324, 325, 5, 25, 0, 0, 325, 326, 5,
-		54, 0, 0, 326, 328, 5, 26, 0, 0, 327, 316, 1, 0, 0, 0, 327, 322, 1, 0,
-		0, 0, 328, 43, 1, 0, 0, 0, 329, 331, 5, 7, 0, 0, 330, 329, 1, 0, 0, 0,
-		330, 331, 1, 0, 0, 0, 331, 332, 1, 0, 0, 0, 332, 333, 5, 56, 0, 0, 333,
-		45, 1, 0, 0, 0, 334, 336, 5, 7, 0, 0, 335, 334, 1, 0, 0, 0, 335, 336, 1,
-		0, 0, 0, 336, 337, 1, 0, 0, 0, 337, 338, 5, 57, 0, 0, 338, 47, 1, 0, 0,
-		0, 339, 340, 5, 55, 0, 0, 340, 49, 1, 0, 0, 0, 341, 342, 7, 4, 0, 0, 342,
+		5, 22, 0, 0, 247, 248, 3, 26, 13, 0, 248, 25, 1, 0, 0, 0, 249, 250, 6,
+		13, -1, 0, 250, 251, 5, 4, 0, 0, 251, 262, 3, 26, 13, 11, 252, 253, 5,
+		5, 0, 0, 253, 262, 3, 26, 13, 10, 254, 255, 5, 3, 0, 0, 255, 262, 3, 26,
+		13, 9, 256, 257, 5, 24, 0, 0, 257, 258, 3, 26, 13, 0, 258, 259, 5, 25,
+		0, 0, 259, 262, 1, 0, 0, 0, 260, 262, 3, 34, 17, 0, 261, 249, 1, 0, 0,
+		0, 261, 252, 1, 0, 0, 0, 261, 254, 1, 0, 0, 0, 261, 256, 1, 0, 0, 0, 261,
+		260, 1, 0, 0, 0, 262, 286, 1, 0, 0, 0, 263, 264, 10, 8, 0, 0, 264, 265,
+		3, 28, 14, 0, 265, 266, 3, 26, 13, 9, 266, 285, 1, 0, 0, 0, 267, 268, 10,
+		7, 0, 0, 268, 269, 3, 30, 15, 0, 269, 270, 3, 26, 13, 8, 270, 285, 1, 0,
+		0, 0, 271, 272, 10, 6, 0, 0, 272, 273, 3, 32, 16, 0, 273, 274, 3, 26, 13,
+		7, 274, 285, 1, 0, 0, 0, 275, 276, 10, 5, 0, 0, 276, 277, 5, 18, 0, 0,
+		277, 285, 3, 26, 13, 6, 278, 279, 10, 4, 0, 0, 279, 280, 5, 1, 0, 0, 280,
+		285, 3, 26, 13, 5, 281, 282, 10, 3, 0, 0, 282, 283, 5, 2, 0, 0, 283, 285,
+		3, 26, 13, 4, 284, 263, 1, 0, 0, 0, 284, 267, 1, 0, 0, 0, 284, 271, 1,
+		0, 0, 0, 284, 275, 1, 0, 0, 0, 284, 278, 1, 0, 0, 0, 284, 281, 1, 0, 0,
+		0, 285, 288, 1, 0, 0, 0, 286, 284, 1, 0, 0, 0, 286, 287, 1, 0, 0, 0, 287,
+		27, 1, 0, 0, 0, 288, 286, 1, 0, 0, 0, 289, 290, 7, 1, 0, 0, 290, 29, 1,
+		0, 0, 0, 291, 292, 7, 2, 0, 0, 292, 31, 1, 0, 0, 0, 293, 294, 7, 3, 0,
+		0, 294, 33, 1, 0, 0, 0, 295, 298, 3, 36, 18, 0, 296, 298, 3, 38, 19, 0,
+		297, 295, 1, 0, 0, 0, 297, 296, 1, 0, 0, 0, 298, 35, 1, 0, 0, 0, 299, 304,
+		3, 48, 24, 0, 300, 304, 3, 46, 23, 0, 301, 304, 3, 44, 22, 0, 302, 304,
+		3, 50, 25, 0, 303, 299, 1, 0, 0, 0, 303, 300, 1, 0, 0, 0, 303, 301, 1,
+		0, 0, 0, 303, 302, 1, 0, 0, 0, 304, 37, 1, 0, 0, 0, 305, 308, 3, 40, 20,
+		0, 306, 308, 3, 42, 21, 0, 307, 305, 1, 0, 0, 0, 307, 306, 1, 0, 0, 0,
+		308, 39, 1, 0, 0, 0, 309, 311, 5, 37, 0, 0, 310, 309, 1, 0, 0, 0, 310,
+		311, 1, 0, 0, 0, 311, 312, 1, 0, 0, 0, 312, 316, 5, 55, 0, 0, 313, 314,
+		5, 38, 0, 0, 314, 316, 5, 55, 0, 0, 315, 310, 1, 0, 0, 0, 315, 313, 1,
+		0, 0, 0, 316, 41, 1, 0, 0, 0, 317, 319, 5, 37, 0, 0, 318, 317, 1, 0, 0,
+		0, 318, 319, 1, 0, 0, 0, 319, 320, 1, 0, 0, 0, 320, 321, 5, 55, 0, 0, 321,
+		322, 5, 26, 0, 0, 322, 323, 5, 55, 0, 0, 323, 330, 5, 27, 0, 0, 324, 325,
+		5, 38, 0, 0, 325, 326, 5, 55, 0, 0, 326, 327, 5, 26, 0, 0, 327, 328, 5,
+		55, 0, 0, 328, 330, 5, 27, 0, 0, 329, 318, 1, 0, 0, 0, 329, 324, 1, 0,
+		0, 0, 330, 43, 1, 0, 0, 0, 331, 333, 5, 8, 0, 0, 332, 331, 1, 0, 0, 0,
+		332, 333, 1, 0, 0, 0, 333, 334, 1, 0, 0, 0, 334, 335, 5, 57, 0, 0, 335,
+		45, 1, 0, 0, 0, 336, 338, 5, 8, 0, 0, 337, 336, 1, 0, 0, 0, 337, 338, 1,
+		0, 0, 0, 338, 339, 1, 0, 0, 0, 339, 340, 5, 58, 0, 0, 340, 47, 1, 0, 0,
+		0, 341, 342, 5, 56, 0, 0, 342, 49, 1, 0, 0, 0, 343, 344, 7, 4, 0, 0, 344,
 		51, 1, 0, 0, 0, 36, 55, 61, 66, 76, 94, 103, 110, 112, 117, 138, 153, 158,
-		168, 174, 179, 187, 195, 200, 203, 214, 219, 227, 235, 242, 259, 282, 284,
-		295, 301, 305, 308, 313, 316, 327, 330, 335,
+		168, 174, 179, 187, 195, 200, 203, 214, 219, 227, 235, 242, 261, 284, 286,
+		297, 303, 307, 310, 315, 318, 329, 332, 337,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -251,63 +253,64 @@ const (
 	SugaredAbuParserAND           = 1
 	SugaredAbuParserOR            = 2
 	SugaredAbuParserNOT           = 3
-	SugaredAbuParserABS           = 4
-	SugaredAbuParserDOT           = 5
-	SugaredAbuParserPLUS          = 6
-	SugaredAbuParserMINUS         = 7
-	SugaredAbuParserDIV           = 8
-	SugaredAbuParserMUL           = 9
-	SugaredAbuParserMOD           = 10
-	SugaredAbuParserEQUALS        = 11
-	SugaredAbuParserGT            = 12
-	SugaredAbuParserLT            = 13
-	SugaredAbuParserGTE           = 14
-	SugaredAbuParserLTE           = 15
-	SugaredAbuParserNOTEQUALS     = 16
-	SugaredAbuParserDOUBLECOLON   = 17
-	SugaredAbuParserCOLON         = 18
-	SugaredAbuParserSEMICOLON     = 19
-	SugaredAbuParserCOLONEQUAL    = 20
-	SugaredAbuParserEQUALSIGN     = 21
-	SugaredAbuParserCOMMA         = 22
-	SugaredAbuParserRL_BRACKET    = 23
-	SugaredAbuParserRR_BRACKET    = 24
-	SugaredAbuParserSL_BRACKET    = 25
-	SugaredAbuParserSR_BRACKET    = 26
-	SugaredAbuParserCL_BRACKET    = 27
-	SugaredAbuParserCR_BRACKET    = 28
-	SugaredAbuParserHAS           = 29
-	SugaredAbuParserWHERE         = 30
-	SugaredAbuParserPHYSICAL      = 31
-	SugaredAbuParserLOGICAL       = 32
-	SugaredAbuParserINPUT         = 33
-	SugaredAbuParserOUTPUT        = 34
-	SugaredAbuParserRULE          = 35
-	SugaredAbuParserTHIS          = 36
-	SugaredAbuParserEXT           = 37
-	SugaredAbuParserON            = 38
-	SugaredAbuParserLET           = 39
-	SugaredAbuParserIN            = 40
-	SugaredAbuParserDEFAULT       = 41
-	SugaredAbuParserFOR           = 42
-	SugaredAbuParserALL           = 43
-	SugaredAbuParserDO            = 44
-	SugaredAbuParserOWISE         = 45
-	SugaredAbuParserDEFINE        = 46
-	SugaredAbuParserAS            = 47
-	SugaredAbuParserBOOLEAN       = 48
-	SugaredAbuParserINTEGER       = 49
-	SugaredAbuParserDECIMAL       = 50
-	SugaredAbuParserSTRING        = 51
-	SugaredAbuParserTRUE          = 52
-	SugaredAbuParserFALSE         = 53
-	SugaredAbuParserID            = 54
-	SugaredAbuParserQUOTED_STRING = 55
-	SugaredAbuParserDEC_LITERAL   = 56
-	SugaredAbuParserINT_LITERAL   = 57
-	SugaredAbuParserWS            = 58
-	SugaredAbuParserCOMMENT       = 59
-	SugaredAbuParserLINE_COMMENT  = 60
+	SugaredAbuParserABSINT        = 4
+	SugaredAbuParserABSDEC        = 5
+	SugaredAbuParserDOT           = 6
+	SugaredAbuParserPLUS          = 7
+	SugaredAbuParserMINUS         = 8
+	SugaredAbuParserDIV           = 9
+	SugaredAbuParserMUL           = 10
+	SugaredAbuParserMOD           = 11
+	SugaredAbuParserEQUALS        = 12
+	SugaredAbuParserGT            = 13
+	SugaredAbuParserLT            = 14
+	SugaredAbuParserGTE           = 15
+	SugaredAbuParserLTE           = 16
+	SugaredAbuParserNOTEQUALS     = 17
+	SugaredAbuParserDOUBLECOLON   = 18
+	SugaredAbuParserCOLON         = 19
+	SugaredAbuParserSEMICOLON     = 20
+	SugaredAbuParserCOLONEQUAL    = 21
+	SugaredAbuParserEQUALSIGN     = 22
+	SugaredAbuParserCOMMA         = 23
+	SugaredAbuParserRL_BRACKET    = 24
+	SugaredAbuParserRR_BRACKET    = 25
+	SugaredAbuParserSL_BRACKET    = 26
+	SugaredAbuParserSR_BRACKET    = 27
+	SugaredAbuParserCL_BRACKET    = 28
+	SugaredAbuParserCR_BRACKET    = 29
+	SugaredAbuParserHAS           = 30
+	SugaredAbuParserWHERE         = 31
+	SugaredAbuParserPHYSICAL      = 32
+	SugaredAbuParserLOGICAL       = 33
+	SugaredAbuParserINPUT         = 34
+	SugaredAbuParserOUTPUT        = 35
+	SugaredAbuParserRULE          = 36
+	SugaredAbuParserTHIS          = 37
+	SugaredAbuParserEXT           = 38
+	SugaredAbuParserON            = 39
+	SugaredAbuParserLET           = 40
+	SugaredAbuParserIN            = 41
+	SugaredAbuParserDEFAULT       = 42
+	SugaredAbuParserFOR           = 43
+	SugaredAbuParserALL           = 44
+	SugaredAbuParserDO            = 45
+	SugaredAbuParserOWISE         = 46
+	SugaredAbuParserDEFINE        = 47
+	SugaredAbuParserAS            = 48
+	SugaredAbuParserBOOLEAN       = 49
+	SugaredAbuParserINTEGER       = 50
+	SugaredAbuParserDECIMAL       = 51
+	SugaredAbuParserSTRING        = 52
+	SugaredAbuParserTRUE          = 53
+	SugaredAbuParserFALSE         = 54
+	SugaredAbuParserID            = 55
+	SugaredAbuParserQUOTED_STRING = 56
+	SugaredAbuParserDEC_LITERAL   = 57
+	SugaredAbuParserINT_LITERAL   = 58
+	SugaredAbuParserWS            = 59
+	SugaredAbuParserCOMMENT       = 60
+	SugaredAbuParserLINE_COMMENT  = 61
 )
 
 // SugaredAbuParser rules.
@@ -1330,7 +1333,7 @@ func (p *SugaredAbuParser) ResList() (localctx IResListContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = (((_la-31)&-(0x1f+1)) == 0 && ((1<<uint((_la-31)))&((1<<(SugaredAbuParserPHYSICAL-31))|(1<<(SugaredAbuParserLOGICAL-31))|(1<<(SugaredAbuParserID-31)))) != 0) {
+	for ok := true; ok; ok = (((_la-32)&-(0x1f+1)) == 0 && ((1<<uint((_la-32)))&((1<<(SugaredAbuParserPHYSICAL-32))|(1<<(SugaredAbuParserLOGICAL-32))|(1<<(SugaredAbuParserID-32)))) != 0) {
 		{
 			p.SetState(114)
 			p.ResDecl()
@@ -1909,7 +1912,7 @@ func (p *SugaredAbuParser) Type() (localctx ITypeContext) {
 		p.SetState(160)
 		_la = p.GetTokenStream().LA(1)
 
-		if !(((_la-48)&-(0x1f+1)) == 0 && ((1<<uint((_la-48)))&((1<<(SugaredAbuParserBOOLEAN-48))|(1<<(SugaredAbuParserINTEGER-48))|(1<<(SugaredAbuParserDECIMAL-48))|(1<<(SugaredAbuParserSTRING-48)))) != 0) {
+		if !(((_la-49)&-(0x1f+1)) == 0 && ((1<<uint((_la-49)))&((1<<(SugaredAbuParserBOOLEAN-49))|(1<<(SugaredAbuParserINTEGER-49))|(1<<(SugaredAbuParserDECIMAL-49))|(1<<(SugaredAbuParserSTRING-49)))) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -2161,7 +2164,7 @@ func (p *SugaredAbuParser) Ecarule() (localctx IEcaruleContext) {
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
-		for ok := true; ok; ok = (((_la-36)&-(0x1f+1)) == 0 && ((1<<uint((_la-36)))&((1<<(SugaredAbuParserTHIS-36))|(1<<(SugaredAbuParserEXT-36))|(1<<(SugaredAbuParserID-36)))) != 0) {
+		for ok := true; ok; ok = (((_la-37)&-(0x1f+1)) == 0 && ((1<<uint((_la-37)))&((1<<(SugaredAbuParserTHIS-37))|(1<<(SugaredAbuParserEXT-37))|(1<<(SugaredAbuParserID-37)))) != 0) {
 			{
 				p.SetState(165)
 				p.Resource()
@@ -2223,7 +2226,7 @@ func (p *SugaredAbuParser) Ecarule() (localctx IEcaruleContext) {
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
-		for ok := true; ok; ok = (((_la-36)&-(0x1f+1)) == 0 && ((1<<uint((_la-36)))&((1<<(SugaredAbuParserTHIS-36))|(1<<(SugaredAbuParserEXT-36))|(1<<(SugaredAbuParserID-36)))) != 0) {
+		for ok := true; ok; ok = (((_la-37)&-(0x1f+1)) == 0 && ((1<<uint((_la-37)))&((1<<(SugaredAbuParserTHIS-37))|(1<<(SugaredAbuParserEXT-37))|(1<<(SugaredAbuParserID-37)))) != 0) {
 			{
 				p.SetState(184)
 				p.Resource()
@@ -3031,8 +3034,8 @@ func NewExpressionContext(parser antlr.Parser, parent antlr.ParserRuleContext, i
 
 func (s *ExpressionContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *ExpressionContext) ABS() antlr.TerminalNode {
-	return s.GetToken(SugaredAbuParserABS, 0)
+func (s *ExpressionContext) ABSINT() antlr.TerminalNode {
+	return s.GetToken(SugaredAbuParserABSINT, 0)
 }
 
 func (s *ExpressionContext) AllExpression() []IExpressionContext {
@@ -3074,6 +3077,10 @@ func (s *ExpressionContext) Expression(i int) IExpressionContext {
 	}
 
 	return t.(IExpressionContext)
+}
+
+func (s *ExpressionContext) ABSDEC() antlr.TerminalNode {
+	return s.GetToken(SugaredAbuParserABSDEC, 0)
 }
 
 func (s *ExpressionContext) NOT() antlr.TerminalNode {
@@ -3219,47 +3226,57 @@ func (p *SugaredAbuParser) expression(_p int) (localctx IExpressionContext) {
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(259)
+	p.SetState(261)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
-	case SugaredAbuParserABS:
+	case SugaredAbuParserABSINT:
 		{
 			p.SetState(250)
-			p.Match(SugaredAbuParserABS)
+			p.Match(SugaredAbuParserABSINT)
 		}
 		{
 			p.SetState(251)
+			p.expression(11)
+		}
+
+	case SugaredAbuParserABSDEC:
+		{
+			p.SetState(252)
+			p.Match(SugaredAbuParserABSDEC)
+		}
+		{
+			p.SetState(253)
 			p.expression(10)
 		}
 
 	case SugaredAbuParserNOT:
 		{
-			p.SetState(252)
+			p.SetState(254)
 			p.Match(SugaredAbuParserNOT)
 		}
 		{
-			p.SetState(253)
+			p.SetState(255)
 			p.expression(9)
 		}
 
 	case SugaredAbuParserRL_BRACKET:
 		{
-			p.SetState(254)
+			p.SetState(256)
 			p.Match(SugaredAbuParserRL_BRACKET)
 		}
 		{
-			p.SetState(255)
+			p.SetState(257)
 			p.expression(0)
 		}
 		{
-			p.SetState(256)
+			p.SetState(258)
 			p.Match(SugaredAbuParserRR_BRACKET)
 		}
 
 	case SugaredAbuParserMINUS, SugaredAbuParserTHIS, SugaredAbuParserEXT, SugaredAbuParserTRUE, SugaredAbuParserFALSE, SugaredAbuParserID, SugaredAbuParserQUOTED_STRING, SugaredAbuParserDEC_LITERAL, SugaredAbuParserINT_LITERAL:
 		{
-			p.SetState(258)
+			p.SetState(260)
 			p.Term()
 		}
 
@@ -3267,7 +3284,7 @@ func (p *SugaredAbuParser) expression(_p int) (localctx IExpressionContext) {
 		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(284)
+	p.SetState(286)
 	p.GetErrorHandler().Sync(p)
 	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 26, p.GetParserRuleContext())
 
@@ -3277,115 +3294,115 @@ func (p *SugaredAbuParser) expression(_p int) (localctx IExpressionContext) {
 				p.TriggerExitRuleEvent()
 			}
 			_prevctx = localctx
-			p.SetState(282)
+			p.SetState(284)
 			p.GetErrorHandler().Sync(p)
 			switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 25, p.GetParserRuleContext()) {
 			case 1:
 				localctx = NewExpressionContext(p, _parentctx, _parentState)
 				p.PushNewRecursionContext(localctx, _startState, SugaredAbuParserRULE_expression)
-				p.SetState(261)
+				p.SetState(263)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 8)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 8)", ""))
 				}
 				{
-					p.SetState(262)
+					p.SetState(264)
 					p.MulDivModOperator()
 				}
 				{
-					p.SetState(263)
+					p.SetState(265)
 					p.expression(9)
 				}
 
 			case 2:
 				localctx = NewExpressionContext(p, _parentctx, _parentState)
 				p.PushNewRecursionContext(localctx, _startState, SugaredAbuParserRULE_expression)
-				p.SetState(265)
+				p.SetState(267)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 7)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 7)", ""))
 				}
 				{
-					p.SetState(266)
+					p.SetState(268)
 					p.PlusMinusOperator()
 				}
 				{
-					p.SetState(267)
+					p.SetState(269)
 					p.expression(8)
 				}
 
 			case 3:
 				localctx = NewExpressionContext(p, _parentctx, _parentState)
 				p.PushNewRecursionContext(localctx, _startState, SugaredAbuParserRULE_expression)
-				p.SetState(269)
+				p.SetState(271)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 6)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 6)", ""))
 				}
 				{
-					p.SetState(270)
+					p.SetState(272)
 					p.ComparisonOperator()
 				}
 				{
-					p.SetState(271)
+					p.SetState(273)
 					p.expression(7)
 				}
 
 			case 4:
 				localctx = NewExpressionContext(p, _parentctx, _parentState)
 				p.PushNewRecursionContext(localctx, _startState, SugaredAbuParserRULE_expression)
-				p.SetState(273)
+				p.SetState(275)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 5)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 5)", ""))
 				}
 				{
-					p.SetState(274)
+					p.SetState(276)
 					p.Match(SugaredAbuParserDOUBLECOLON)
 				}
 				{
-					p.SetState(275)
+					p.SetState(277)
 					p.expression(6)
 				}
 
 			case 5:
 				localctx = NewExpressionContext(p, _parentctx, _parentState)
 				p.PushNewRecursionContext(localctx, _startState, SugaredAbuParserRULE_expression)
-				p.SetState(276)
+				p.SetState(278)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 4)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 4)", ""))
 				}
 				{
-					p.SetState(277)
+					p.SetState(279)
 					p.Match(SugaredAbuParserAND)
 				}
 				{
-					p.SetState(278)
+					p.SetState(280)
 					p.expression(5)
 				}
 
 			case 6:
 				localctx = NewExpressionContext(p, _parentctx, _parentState)
 				p.PushNewRecursionContext(localctx, _startState, SugaredAbuParserRULE_expression)
-				p.SetState(279)
+				p.SetState(281)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 3)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 3)", ""))
 				}
 				{
-					p.SetState(280)
+					p.SetState(282)
 					p.Match(SugaredAbuParserOR)
 				}
 				{
-					p.SetState(281)
+					p.SetState(283)
 					p.expression(4)
 				}
 
 			}
 
 		}
-		p.SetState(286)
+		p.SetState(288)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 26, p.GetParserRuleContext())
 	}
@@ -3489,7 +3506,7 @@ func (p *SugaredAbuParser) MulDivModOperator() (localctx IMulDivModOperatorConte
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(287)
+		p.SetState(289)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<SugaredAbuParserDIV)|(1<<SugaredAbuParserMUL)|(1<<SugaredAbuParserMOD))) != 0) {
@@ -3595,7 +3612,7 @@ func (p *SugaredAbuParser) PlusMinusOperator() (localctx IPlusMinusOperatorConte
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(289)
+		p.SetState(291)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(_la == SugaredAbuParserPLUS || _la == SugaredAbuParserMINUS) {
@@ -3717,7 +3734,7 @@ func (p *SugaredAbuParser) ComparisonOperator() (localctx IComparisonOperatorCon
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(291)
+		p.SetState(293)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<SugaredAbuParserEQUALS)|(1<<SugaredAbuParserGT)|(1<<SugaredAbuParserLT)|(1<<SugaredAbuParserGTE)|(1<<SugaredAbuParserLTE)|(1<<SugaredAbuParserNOTEQUALS))) != 0) {
@@ -3844,21 +3861,21 @@ func (p *SugaredAbuParser) Term() (localctx ITermContext) {
 		}
 	}()
 
-	p.SetState(295)
+	p.SetState(297)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case SugaredAbuParserMINUS, SugaredAbuParserTRUE, SugaredAbuParserFALSE, SugaredAbuParserQUOTED_STRING, SugaredAbuParserDEC_LITERAL, SugaredAbuParserINT_LITERAL:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(293)
+			p.SetState(295)
 			p.Value()
 		}
 
 	case SugaredAbuParserTHIS, SugaredAbuParserEXT, SugaredAbuParserID:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(294)
+			p.SetState(296)
 			p.Resource()
 		}
 
@@ -4014,34 +4031,34 @@ func (p *SugaredAbuParser) Value() (localctx IValueContext) {
 		}
 	}()
 
-	p.SetState(301)
+	p.SetState(303)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 28, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(297)
+			p.SetState(299)
 			p.StringLiteral()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(298)
+			p.SetState(300)
 			p.IntegerLiteral()
 		}
 
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(299)
+			p.SetState(301)
 			p.DecimalLiteral()
 		}
 
 	case 4:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(300)
+			p.SetState(302)
 			p.BooleanLiteral()
 		}
 
@@ -4163,20 +4180,20 @@ func (p *SugaredAbuParser) Resource() (localctx IResourceContext) {
 		}
 	}()
 
-	p.SetState(305)
+	p.SetState(307)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 29, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(303)
+			p.SetState(305)
 			p.SimpleResource()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(304)
+			p.SetState(306)
 			p.NestedResource()
 		}
 
@@ -4279,36 +4296,36 @@ func (p *SugaredAbuParser) SimpleResource() (localctx ISimpleResourceContext) {
 		}
 	}()
 
-	p.SetState(313)
+	p.SetState(315)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case SugaredAbuParserTHIS, SugaredAbuParserID:
 		p.EnterOuterAlt(localctx, 1)
-		p.SetState(308)
+		p.SetState(310)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == SugaredAbuParserTHIS {
 			{
-				p.SetState(307)
+				p.SetState(309)
 				p.Match(SugaredAbuParserTHIS)
 			}
 
 		}
 		{
-			p.SetState(310)
+			p.SetState(312)
 			p.Match(SugaredAbuParserID)
 		}
 
 	case SugaredAbuParserEXT:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(311)
+			p.SetState(313)
 			p.Match(SugaredAbuParserEXT)
 		}
 		{
-			p.SetState(312)
+			p.SetState(314)
 			p.Match(SugaredAbuParserID)
 		}
 
@@ -4425,30 +4442,22 @@ func (p *SugaredAbuParser) NestedResource() (localctx INestedResourceContext) {
 		}
 	}()
 
-	p.SetState(327)
+	p.SetState(329)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case SugaredAbuParserTHIS, SugaredAbuParserID:
 		p.EnterOuterAlt(localctx, 1)
-		p.SetState(316)
+		p.SetState(318)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == SugaredAbuParserTHIS {
 			{
-				p.SetState(315)
+				p.SetState(317)
 				p.Match(SugaredAbuParserTHIS)
 			}
 
-		}
-		{
-			p.SetState(318)
-			p.Match(SugaredAbuParserID)
-		}
-		{
-			p.SetState(319)
-			p.Match(SugaredAbuParserSL_BRACKET)
 		}
 		{
 			p.SetState(320)
@@ -4456,22 +4465,22 @@ func (p *SugaredAbuParser) NestedResource() (localctx INestedResourceContext) {
 		}
 		{
 			p.SetState(321)
+			p.Match(SugaredAbuParserSL_BRACKET)
+		}
+		{
+			p.SetState(322)
+			p.Match(SugaredAbuParserID)
+		}
+		{
+			p.SetState(323)
 			p.Match(SugaredAbuParserSR_BRACKET)
 		}
 
 	case SugaredAbuParserEXT:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(322)
-			p.Match(SugaredAbuParserEXT)
-		}
-		{
-			p.SetState(323)
-			p.Match(SugaredAbuParserID)
-		}
-		{
 			p.SetState(324)
-			p.Match(SugaredAbuParserSL_BRACKET)
+			p.Match(SugaredAbuParserEXT)
 		}
 		{
 			p.SetState(325)
@@ -4479,6 +4488,14 @@ func (p *SugaredAbuParser) NestedResource() (localctx INestedResourceContext) {
 		}
 		{
 			p.SetState(326)
+			p.Match(SugaredAbuParserSL_BRACKET)
+		}
+		{
+			p.SetState(327)
+			p.Match(SugaredAbuParserID)
+		}
+		{
+			p.SetState(328)
 			p.Match(SugaredAbuParserSR_BRACKET)
 		}
 
@@ -4580,19 +4597,19 @@ func (p *SugaredAbuParser) DecimalLiteral() (localctx IDecimalLiteralContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(330)
+	p.SetState(332)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == SugaredAbuParserMINUS {
 		{
-			p.SetState(329)
+			p.SetState(331)
 			p.Match(SugaredAbuParserMINUS)
 		}
 
 	}
 	{
-		p.SetState(332)
+		p.SetState(334)
 		p.Match(SugaredAbuParserDEC_LITERAL)
 	}
 
@@ -4690,19 +4707,19 @@ func (p *SugaredAbuParser) IntegerLiteral() (localctx IIntegerLiteralContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(335)
+	p.SetState(337)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == SugaredAbuParserMINUS {
 		{
-			p.SetState(334)
+			p.SetState(336)
 			p.Match(SugaredAbuParserMINUS)
 		}
 
 	}
 	{
-		p.SetState(337)
+		p.SetState(339)
 		p.Match(SugaredAbuParserINT_LITERAL)
 	}
 
@@ -4796,7 +4813,7 @@ func (p *SugaredAbuParser) StringLiteral() (localctx IStringLiteralContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(339)
+		p.SetState(341)
 		p.Match(SugaredAbuParserQUOTED_STRING)
 	}
 
@@ -4895,7 +4912,7 @@ func (p *SugaredAbuParser) BooleanLiteral() (localctx IBooleanLiteralContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(341)
+		p.SetState(343)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(_la == SugaredAbuParserTRUE || _la == SugaredAbuParserFALSE) {
