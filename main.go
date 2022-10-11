@@ -55,20 +55,29 @@ func main() {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(4)
 	}
+	exitCode := 0
 	for d, ts := range preprocs {
 		st, err := symbolTable.DeviceSymbolTable(d)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, d+":", err.Error())
-			os.Exit(4)
+			exitCode = 5
+			break
 		}
 		errs := compiler.compile(d, ts, st)
 		if len(errs) > 0 {
 			for _, err := range errs {
 				fmt.Fprintln(os.Stderr, d+":", err.Error())
 			}
-			os.Exit(4)
+			exitCode = 6
+			break
 		}
 	}
+	err = compiler.Close()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+		exitCode = 7
+	}
+	os.Exit(exitCode)
 }
 
 type flagInfo struct {

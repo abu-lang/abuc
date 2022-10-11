@@ -38,6 +38,12 @@ func (i commonCompileInfo) outputFile(device, ext string) string {
 	return i.output + device + ext
 }
 
+// Close is a no-op for implementing compileStrategy.Close
+// in simple strategies.
+func (i commonCompileInfo) Close() error {
+	return nil
+}
+
 func makeCompileStrategy(sys, tgt, out, cfg string) (compileStrategy, error) {
 	com := makeCommonCompileInfo(sys, tgt, out)
 	switch tgt {
