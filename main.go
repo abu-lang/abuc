@@ -55,29 +55,52 @@ func main() {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(4)
 	}
-	exitCode := 0
+	outcomes := make(chan struct {
+		device string
+		errs   []error
+	})
 	for d, ts := range preprocs {
-		st, err := symbolTable.DeviceSymbolTable(d)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, d+":", err.Error())
-			exitCode = 5
-			break
-		}
-		errs := compiler.compile(d, ts, st)
-		if len(errs) > 0 {
-			for _, err := range errs {
-				fmt.Fprintln(os.Stderr, d+":", err.Error())
+		d := d
+		ts := ts
+		go func(out chan<- struct {
+			device string
+			errs   []error
+		}) {
+			o := struct {
+				device string
+				errs   []error
+			}{
+				device: d,
 			}
-			exitCode = 6
-			break
+			st, err := symbolTable.DeviceSymbolTable(d)
+			if err != nil {
+				o.errs = []error{err}
+			} else {
+				o.errs = compiler.compile(d, ts, st)
+			}
+			out <- o
+		}(outcomes)
+	}
+	remaining := len(preprocs)
+	ok := true
+	for remaining > 0 {
+		o := <-outcomes
+		remaining--
+		if len(o.errs) > 0 {
+			ok = false
+			fmt.Fprintln(os.Stderr, o.device+":")
+			for _, err := range o.errs {
+				fmt.Fprintln(os.Stderr, `	`, err.Error())
+			}
 		}
 	}
 	err = compiler.Close()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
-		exitCode = 7
 	}
-	os.Exit(exitCode)
+	if err != nil || !ok {
+		os.Exit(5)
+	}
 }
 
 type flagInfo struct {

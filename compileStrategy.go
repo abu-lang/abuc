@@ -7,6 +7,9 @@ type compileStrategy interface {
 	// preprocessed abudsl source code and outputs the compilation
 	// result to a file. A not empty []error is returned if some
 	// errors are encountered.
+	//
+	// Behavior is undefined for concurrent calls sharing the string and/or stream
+	// arguments, in the other cases the implementations are thread-safe.
 	compile(string, preprocessor.TrivialStream, preprocessor.DeviceSymbolTable) []error
 
 	// Close may perform some clean up operations when the compilation
