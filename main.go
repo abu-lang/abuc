@@ -15,8 +15,11 @@ func main() {
 	system := runtime.GOOS
 	target := runtime.GOARCH
 	version_opt := false
+	intermediate := false
 	flag.StringVar(&config, "config", config, "configuration file for target")
 	flag.StringVar(&config, "c", config, "configuration file for target")
+	flag.BoolVar(&intermediate, "intermediate", false, "generate intermediate (single node) .abu files")
+	flag.BoolVar(&intermediate, "i", false, "generate intermediate (single node) .abu files")
 	flag.StringVar(&output, "output", output, "output file name for the compiled source")
 	flag.StringVar(&output, "o", output, "output file name for the compiled source")
 	flag.StringVar(&system, "system", system, "target operating system")
@@ -32,6 +35,9 @@ func main() {
 		os.Exit(0)
 	}
 	source := flag.Arg(0)
+	if intermediate {
+		target = "abu"
+	}
 	switch target {
 	case "go":
 	case "abu":
@@ -120,7 +126,7 @@ func printUsage(out io.Writer) error {
 	}
 	for _, f := range getFlagInfos() {
 		if f.typ == "boolean" {
-			_, err = fmt.Fprintf(out, "  -%s, --%s\t: %s\n\n", f.short, f.long, f.usage)
+			_, err = fmt.Fprintf(out, "  -%s, --%s :\t%s\n\n", f.short, f.long, f.usage)
 		} else {
 			_, err = fmt.Fprintf(out, "  -%s, --%s %s\n    \t%s %s\n\n", f.short, f.long, f.typ, f.usage, f.def)
 		}
@@ -139,6 +145,7 @@ func printUsage(out io.Writer) error {
 func getFlagInfos() []flagInfo {
 	longFlag := map[string]string{
 		"c": "config",
+		"i": "intermediate",
 		"o": "output",
 		"s": "system",
 		"t": "target",
