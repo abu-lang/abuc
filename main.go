@@ -27,7 +27,7 @@ func main() {
 	flag.StringVar(&target, "target", target, "target language or architecture")
 	flag.StringVar(&target, "t", target, "target language or architecture")
 	flag.BoolVar(&version_opt, "version", false, "print version information and exit")
-	flag.BoolVar(&version_opt, "V", false, "print version information and exit")
+	flag.BoolVar(&version_opt, "v", false, "print version information and exit")
 	flag.Parse()
 	if version_opt {
 		fmt.Println("abuc version " + version())
@@ -149,7 +149,7 @@ func getFlagInfos() []flagInfo {
 		"o": "output",
 		"s": "system",
 		"t": "target",
-		"V": "version",
+		"v": "version",
 	}
 	res := make([]flagInfo, 0, len(longFlag))
 	flag.VisitAll(func(f *flag.Flag) {
