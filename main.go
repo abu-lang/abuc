@@ -42,13 +42,7 @@ func main() {
 		target = "abu"
 	}
 	switch target {
-	case "go":
-	case "abu":
-	case "amd64":
-		fallthrough
-	case "arm64":
-		fmt.Printf("target %s is not yet available\n", target)
-		os.Exit(0)
+	case "go", "abu", "amd64", "arm64":
 	default:
 		fmt.Fprintf(os.Stderr, "unknown target %s\n", target)
 		os.Exit(1)

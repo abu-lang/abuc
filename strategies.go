@@ -5,10 +5,13 @@ package main
 
 import (
 	_ "embed"
-	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
+	"os/exec"
+	"path/filepath"
+	"sync"
 	"text/template"
 
 	"github.com/abu-lang/abuc/parser"
@@ -34,11 +37,11 @@ func makeCommonCompileInfo(sys, tgt, out string) commonCompileInfo {
 	}
 }
 
-func (i commonCompileInfo) outputFile(device, ext string) string {
-	if i.output != "" && !os.IsPathSeparator(i.output[len(i.output)-1]) {
-		return i.output + "-" + device + ext
+func outputFile(output, device, ext string) string {
+	if output != "" && !os.IsPathSeparator(output[len(output)-1]) {
+		return output + "-" + device + ext
 	}
-	return i.output + device + ext
+	return output + device + ext
 }
 
 // Close is a no-op for implementing compileStrategy.Close
@@ -55,26 +58,111 @@ func makeCompileStrategy(sys, tgt, out, cfg string) (compileStrategy, error) {
 			commonCompileInfo: com,
 		}, nil
 	case "go":
-		res := goabuCompiler{
+		conf, err := readGoabuConfig(cfg)
+		if err != nil {
+			return nil, err
+		}
+		return goabuCompiler{
 			commonCompileInfo: com,
+			config:            conf,
 			template:          template.Must(template.New("goabu").Parse(goabuTemplate)),
-		}
-		if cfg == "" {
-			return res, nil
-		}
-		f, err := os.Open(cfg)
+		}, nil
+	case "arm64", "amd64":
+		conf, err := readGoabuConfig(cfg)
 		if err != nil {
 			return nil, err
 		}
-		defer f.Close()
-		err = json.NewDecoder(f).Decode(&res.config)
+		wd, err := os.MkdirTemp("", "abuc-")
 		if err != nil {
 			return nil, err
 		}
-		return res, nil
+		goDest := wd + string(os.PathSeparator)
+		if out != "" && !os.IsPathSeparator(out[len(out)-1]) {
+			goDest = filepath.Join(wd, filepath.Base(out))
+		}
+		gs, err := makeCompileStrategy(sys, "go", goDest, cfg)
+		if err != nil {
+			os.Remove(wd)
+			return nil, err
+		}
+		return machineCodeCompiler{
+			commonCompileInfo: com,
+			additionalFiles:   basenames(conf.AdditionalFiles),
+			goDest:            goDest,
+			goCompiler:        gs,
+			workDir:           wd,
+			ready:             prepareWorkDir(wd, conf.AdditionalFiles),
+		}, nil
 	default:
 		panic(errors.New("no compile strategy for target:" + tgt))
 	}
+}
+
+// basenames returns the base names of the argument's elements.
+func basenames(paths []string) []string {
+	res := make([]string, 0, len(paths))
+	for _, p := range paths {
+		res = append(res, filepath.Base(p))
+	}
+	return res
+}
+
+func prepareWorkDir(wd string, files []string) <-chan error {
+	res := make(chan error)
+	go func(done chan<- error) {
+		var err error
+		defer func() {
+			for {
+				done <- err
+			}
+		}()
+		if !runCommand(wd, "go", "mod", "init", filepath.Base(wd)) {
+			err = errors.New("could not initialize Go module")
+			return
+		}
+		if len(files) > 0 {
+			err = copyFiles(wd, files)
+			if err != nil {
+				return
+			}
+			// possibly fetch dependencies from additional files (not mandatory)
+			runCommand(wd, "go", "mod", "tidy")
+		}
+		if !runCommand(wd, "go", "get", "github.com/abu-lang/goabu@"+goabuVersion) {
+			err = errors.New("could not fetch GoAbU")
+		}
+	}(res)
+	return res
+}
+
+// runCommand takes as argument a directory path and the arguments of a command.
+// The command will be executed in the specified directory and the returned bool
+// indicates wheter the command completed successfully or not.
+func runCommand(workDir, name string, arg ...string) bool {
+	cmd := exec.Command(name, arg...)
+	cmd.Dir = workDir
+	return nil == cmd.Run()
+}
+
+// copyFiles takes as argument a directory path and a slice of
+// file paths and tries to copy the specified files in the indicated
+// directory.
+func copyFiles(dest string, files []string) error {
+	for _, p := range files {
+		r, err := os.Open(p)
+		if err != nil {
+			return err
+		}
+		w, err := os.Create(filepath.Join(dest, p))
+		if err != nil {
+			return err
+		}
+		_, err = io.Copy(w, r)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 type abuCompiler struct {
@@ -82,7 +170,7 @@ type abuCompiler struct {
 }
 
 func (a abuCompiler) compile(device string, stream preprocessor.TrivialStream, st preprocessor.DeviceSymbolTable) []error {
-	f, err := os.Create(a.outputFile(device, ".abu"))
+	f, err := os.Create(outputFile(a.output, device, ".abu"))
 	if err != nil {
 		return []error{err}
 	}
@@ -114,7 +202,7 @@ func (g goabuCompiler) compile(device string, stream preprocessor.TrivialStream,
 	if len(errs) > 0 {
 		return errs
 	}
-	f, err := os.Create(g.outputFile(device, ".go"))
+	f, err := os.Create(outputFile(g.output, device, ".go"))
 	if err != nil {
 		return []error{err}
 	}
@@ -154,6 +242,72 @@ func parseAbuProgram(stream preprocessor.TrivialStream, st preprocessor.DeviceSy
 		}
 	}
 	return list.abuProgram, nil
+}
+
+type machineCodeCompiler struct {
+	commonCompileInfo
+
+	goDest     string
+	goCompiler compileStrategy
+
+	additionalFiles []string
+	workDir         string
+	ready           <-chan error
+	tidyOnce        sync.Once
+}
+
+func (m machineCodeCompiler) Close() error {
+	err := m.goCompiler.Close()
+	if err != nil {
+		return err
+	}
+	<-m.ready
+	// RemoveAll fails silently with "" as argument
+	// See https://github.com/golang/go/issues/28830
+	if m.workDir == "" {
+		return errors.New("invalid temporary working directory")
+	}
+	return os.RemoveAll(m.workDir)
+}
+
+func (m machineCodeCompiler) compile(device string, stream preprocessor.TrivialStream, st preprocessor.DeviceSymbolTable) []error {
+	// transpile from abudsl to Go
+	errs := m.goCompiler.compile(device, stream, st)
+	if len(errs) > 0 {
+		return errs
+	}
+	// wait for working directory preparations
+	err := <-m.ready
+	if err != nil {
+		return []error{err}
+	}
+	// fetch dependencies
+	m.tidyOnce.Do(func() {
+		if !runCommand(m.workDir, "go", "mod", "tidy") {
+			err = errors.New("error in fetching the required dependencies")
+		}
+	})
+	if err != nil {
+		return []error{err}
+	}
+	// construct go build command
+	comp := exec.Command("go")
+	comp.Dir = m.workDir
+	comp.Env = append(os.Environ(), "GOOS="+m.system, "GOARCH="+m.target)
+	comp.Args = make([]string, 0, 5+len(m.additionalFiles))
+	dst, err := filepath.Abs(filepath.Dir(m.output))
+	if err != nil {
+		return []error{err}
+	}
+	dst = dst + string(os.PathSeparator) // (create directory if missing)
+	comp.Args = append(comp.Args, "go", "build", "-o", dst, filepath.Base(outputFile(m.goDest, device, ".go")))
+	comp.Args = append(comp.Args, m.additionalFiles...)
+	// compile go sources
+	_, err = comp.Output()
+	if err != nil {
+		return []error{errors.New(string(err.(*exec.ExitError).Stderr))}
+	}
+	return nil
 }
 
 type errorHolder struct {
