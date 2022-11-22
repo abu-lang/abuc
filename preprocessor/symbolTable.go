@@ -71,7 +71,7 @@ func DecodeSymbolTable(r io.Reader) (SymbolTable, error) {
 	return res, nil
 }
 
-// DeviceSymbolTable is a SymbolTable that ca be used to obtain information on
+// DeviceSymbolTable is a SymbolTable that can be used to obtain information on
 // the local and remote resources of a selected device.
 type DeviceSymbolTable struct {
 	device string
