@@ -27,7 +27,6 @@ NOTEQUALS       : '!=';
 DOUBLECOLON     : '::';
 
 COLON           : ':' ;
-SEMICOLON       : ';' ;
 COLONEQUAL      : ':=';
 EQUALSIGN       : '=' ;
 COMMA           : ',' ;

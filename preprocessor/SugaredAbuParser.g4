@@ -58,7 +58,7 @@ task
 
 
 actions
-    : assignment (SEMICOLON assignment)*
+    : assignment (COMMA assignment)*
     ;
 
 assignment

@@ -169,7 +169,7 @@ func sugaredabuparserParserInit() {
 		230, 3, 26, 13, 0, 230, 231, 5, 45, 0, 0, 231, 232, 3, 22, 11, 0, 232,
 		233, 5, 46, 0, 0, 233, 234, 3, 22, 11, 0, 234, 236, 1, 0, 0, 0, 235, 217,
 		1, 0, 0, 0, 235, 225, 1, 0, 0, 0, 236, 21, 1, 0, 0, 0, 237, 242, 3, 24,
-		12, 0, 238, 239, 5, 20, 0, 0, 239, 241, 3, 24, 12, 0, 240, 238, 1, 0, 0,
+		12, 0, 238, 239, 5, 23, 0, 0, 239, 241, 3, 24, 12, 0, 240, 238, 1, 0, 0,
 		0, 241, 244, 1, 0, 0, 0, 242, 240, 1, 0, 0, 0, 242, 243, 1, 0, 0, 0, 243,
 		23, 1, 0, 0, 0, 244, 242, 1, 0, 0, 0, 245, 246, 3, 38, 19, 0, 246, 247,
 		5, 22, 0, 0, 247, 248, 3, 26, 13, 0, 248, 25, 1, 0, 0, 0, 249, 250, 6,
@@ -2783,12 +2783,12 @@ func (s *ActionsContext) Assignment(i int) IAssignmentContext {
 	return t.(IAssignmentContext)
 }
 
-func (s *ActionsContext) AllSEMICOLON() []antlr.TerminalNode {
-	return s.GetTokens(SugaredAbuParserSEMICOLON)
+func (s *ActionsContext) AllCOMMA() []antlr.TerminalNode {
+	return s.GetTokens(SugaredAbuParserCOMMA)
 }
 
-func (s *ActionsContext) SEMICOLON(i int) antlr.TerminalNode {
-	return s.GetToken(SugaredAbuParserSEMICOLON, i)
+func (s *ActionsContext) COMMA(i int) antlr.TerminalNode {
+	return s.GetToken(SugaredAbuParserCOMMA, i)
 }
 
 func (s *ActionsContext) GetRuleContext() antlr.RuleContext {
@@ -2844,10 +2844,10 @@ func (p *SugaredAbuParser) Actions() (localctx IActionsContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for _la == SugaredAbuParserSEMICOLON {
+	for _la == SugaredAbuParserCOMMA {
 		{
 			p.SetState(238)
-			p.Match(SugaredAbuParserSEMICOLON)
+			p.Match(SugaredAbuParserCOMMA)
 		}
 		{
 			p.SetState(239)
