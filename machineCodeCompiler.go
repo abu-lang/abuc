@@ -24,6 +24,7 @@ type machineCodeCompiler struct {
 	workDir         string
 	ready           <-chan error
 	tidyOnce        *sync.Once
+	lockGoBuild     *sync.Mutex
 }
 
 func makeMachineCodeCompiler(comm commonCompileInfo, cfgPath string) (compileStrategy, error) {
@@ -52,6 +53,7 @@ func makeMachineCodeCompiler(comm commonCompileInfo, cfgPath string) (compileStr
 		workDir:           wd,
 		ready:             prepareWorkDir(wd, conf.AdditionalFiles),
 		tidyOnce:          &sync.Once{},
+		lockGoBuild:       &sync.Mutex{},
 	}, nil
 }
 
@@ -102,7 +104,9 @@ func (m machineCodeCompiler) compile(device string, stream preprocessor.TrivialS
 	comp.Args = append(comp.Args, "go", "build", "-o", dst, filepath.Base(outputFile(m.goDest, device, ".go")))
 	comp.Args = append(comp.Args, m.additionalFiles...)
 	// compile go sources
+	m.lockGoBuild.Lock()
 	_, err = comp.Output()
+	m.lockGoBuild.Unlock()
 	if err != nil {
 		return []error{errors.New(string(err.(*exec.ExitError).Stderr))}
 	}
