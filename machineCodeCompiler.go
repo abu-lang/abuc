@@ -23,7 +23,7 @@ type machineCodeCompiler struct {
 	additionalFiles []string
 	workDir         string
 	ready           <-chan error
-	tidyOnce        sync.Once
+	tidyOnce        *sync.Once
 }
 
 func makeMachineCodeCompiler(comm commonCompileInfo, cfgPath string) (compileStrategy, error) {
@@ -51,6 +51,7 @@ func makeMachineCodeCompiler(comm commonCompileInfo, cfgPath string) (compileStr
 		goCompiler:        gs,
 		workDir:           wd,
 		ready:             prepareWorkDir(wd, conf.AdditionalFiles),
+		tidyOnce:          &sync.Once{},
 	}, nil
 }
 
