@@ -33,9 +33,9 @@ Available options for <target>:
   arm64    compile into 'arm64' executable
 ```
 
-### Example
+### Examples
 
-As an example, consider the following snippet of an `abudsl` program `test.abu`:
+Consider the following snippet of an `abudsl` program `test.abu`:
 ```
 # AbU devices definition.
 
@@ -54,8 +54,17 @@ dev3 : "A third test device" {
     ...
 }
 ```
-We can compile such program to *Golang* code by typing: `abuc -o testgo -t go test.abu`. <br>
-The command outputs three *Golang* source code file `testgo-dev1.go`, `testgo-dev2.go` and `testgo-dev3.go`.
+We can compile such program to *Golang* code by typing: 
+```
+$ abuc -o testgo -t go test.abu
+```
+The command outputs three *Golang* source code file `testgo-dev1.go`, `testgo-dev2.go` and `testgo-dev3.go`. <br><br>
+
+Consider now the `abudsl` example program `raspberry-pi.abu`, that you can find in the [raspberry-pi](https://github.com/abu-lang/abudsl/tree/master/examples/raspberry-pi) folder. We can compile such program to *arm64* executables by typing:
+```
+$ abuc -o testraspberry -t arm64 -c config.json raspberry-pi.abu
+```
+The command outputs two *arm64* executables `testraspberry-controls` and `testraspberry-wheel`, that can be directly deployed on the Raspberry Pi.
 
 ## License
 `abuc` is [licensed](https://github.com/abu-lang/abuc/blob/main/LICENSE) under the Apache-2.0 License.
