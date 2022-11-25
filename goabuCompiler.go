@@ -7,6 +7,7 @@ import (
 	_ "embed"
 	"fmt"
 	"os"
+	"path/filepath"
 	"text/template"
 
 	"github.com/abu-lang/abuc/parser"
@@ -45,7 +46,9 @@ func (g goabuCompiler) compile(device string, stream preprocessor.TrivialStream,
 	if len(errs) > 0 {
 		return errs
 	}
-	f, err := os.Create(outputFile(g.output, device, ".go"))
+	out := outputFile(g.output, device, ".go")
+	os.MkdirAll(filepath.Dir(out), 0755)
+	f, err := os.Create(out)
 	if err != nil {
 		return []error{err}
 	}

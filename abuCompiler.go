@@ -6,6 +6,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/abu-lang/abuc/preprocessor"
 )
@@ -19,7 +20,9 @@ func makeAbuCompiler(comm commonCompileInfo) (compileStrategy, error) {
 }
 
 func (a abuCompiler) compile(device string, stream preprocessor.TrivialStream, st preprocessor.DeviceSymbolTable) []error {
-	f, err := os.Create(outputFile(a.output, device, ".abu"))
+	out := outputFile(a.output, device, ".abu")
+	os.MkdirAll(filepath.Dir(out), 0755)
+	f, err := os.Create(out)
 	if err != nil {
 		return []error{err}
 	}
