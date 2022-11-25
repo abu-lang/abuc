@@ -4,34 +4,38 @@
 
 A compiler for the AbU language.
 
-`abuc` is a compiler translating programs written with AbU DSL [`abudsl`](https://github.com/abu-lang/abudsl) to different platforms. At the moment, the compiler supports the following target languages/architectures: *Golang* code, *amd64* executables and *arm64* executables; and the following operating systems: *Linux* based systems.
+`abuc` is a compiler translating programs written with AbU DSL [`abudsl`](https://github.com/abu-lang/abudsl) to different platforms. At the moment, the compiler supports the following target languages/architectures: *Go* code, *amd64* executables and *arm64* executables.
+
+### Requirements
+An [adequate](https://go.dev/doc/devel/release#policy) version of the Go language is required for installing and using `abuc` (it calls the Go language compiler in its execution).
 
 ## Installation
-The compiler can be retrieved with go get:
+`abuc` can be installed with the go install command:
 ```
-$ go get github.com/abu-lang/abuc
+$ go install github.com/abu-lang/abuc@latest
 ```
 
 ## Usage
 ```
-Usage: abuc [-ivh] [-o <output>] [-s <system>] [-t <target>] [-c <config>] <source>
+Usage: abuc [-ivh] [-o <output>] [-s <system>] [-t <target>] [-c <config>] [<source>]
   <source>                 filename of the source code to compile
-  -o, --output <output>    output filename for the compiled source [optional]
-  -s, --system <system>    target operating system [optional, default 'linux']
-  -t, --target <target>    target language or architecture [optional, default 'amd64']
-  -c, --config <config>    configuration file for <target> [optional]
-  -i, --intermediate       intermediate (single node) .abu files are generated [optional]
-  -v, --version            print version information and exit [optional]
+  -o, --output <output>    output filename for the compiled source
+  -s, --system <system>    target operating system [default: the operating system where abuc was installed]
+  -t, --target <target>    target language or architecture [default: the architecture where abuc was installed]
+  -c, --config <config>    configuration file for <target>
+  -i, --intermediate       intermediate (single node) .abu files are generated
+  -v, --version            print version information and exit
   -h, --help               print usage
 
-Available options for <system>:
-  linux    compile into 'Linux' based systems 
-  
-Available options for <target>:
-  go       compile into 'Golang' code
+Available values for <target>:
+  go       compile into 'Go' code
   amd64    compile into 'amd64' executable
   arm64    compile into 'arm64' executable
+
+Available values for <system>:
+  run 'go tool dist list' to see a list of possible (<system>, <target>) pairs
 ```
+If `<source>` is not specified, the `abudsl` input is read from the standard input. If provided, the `<source>` option is to be specified as the last argument.
 
 ### Examples
 
@@ -54,16 +58,17 @@ dev3 : "A third test device" {
     ...
 }
 ```
-We can compile such program to *Golang* code by typing: 
+We can compile such program to *Go* code by typing:
 ```
 $ abuc -o testgo -t go test.abu
 ```
-The command outputs three *Golang* source code file `testgo-dev1.go`, `testgo-dev2.go` and `testgo-dev3.go`. <br><br>
+The command outputs three *Go* source code files `testgo-dev1.go`, `testgo-dev2.go` and `testgo-dev3.go`. <br><br>
 
-Consider now the `abudsl` example program `raspberry-pi.abu`, that you can find in the [raspberry-pi](https://github.com/abu-lang/abudsl/tree/master/examples/raspberry-pi) folder. We can compile such program to *arm64* executables by typing:
+Consider now the `abudsl` example program `raspberry-pi.abu`, that you can find in the [raspberry-pi](https://github.com/abu-lang/abudsl/tree/master/examples/raspberry-pi) directory of the `abudsl` repository. We can compile such program to *arm64* executables by typing:
 ```
-$ abuc -o testraspberry -t arm64 -c config.json raspberry-pi.abu
+$ abuc -o testraspberry -s linux -t arm64 -c config.json raspberry-pi.abu
 ```
+in the `raspberry-pi` directory.
 The command outputs two *arm64* executables `testraspberry-controls` and `testraspberry-wheel`, that can be directly deployed on the Raspberry Pi.
 
 ## License
