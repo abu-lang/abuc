@@ -8,7 +8,7 @@ A compiler for the AbU language.
 
 ## Usage
 ```
-Usage: abuc [-iv] [-o <output>] [-s <system>] [-t <target>] [-c <config>] <source>
+Usage: abuc [-ivh] [-o <output>] [-s <system>] [-t <target>] [-c <config>] <source>
   <source>                 filename of the source code to compile
   -o, --output <output>    output filename for the compiled source [optional]
   -s, --system <system>    target operating system [optional, default 'linux']
@@ -16,6 +16,7 @@ Usage: abuc [-iv] [-o <output>] [-s <system>] [-t <target>] [-c <config>] <sourc
   -c, --config <config>    configuration file for <target> [optional]
   -i, --intermediate       intermediate (single node) .abu files are generated [optional]
   -v, --version            print version information and exit [optional]
+  -h, --help               print usage
 
 Available options for <system>:
   linux    compatibility with 'Linux' like systems 
