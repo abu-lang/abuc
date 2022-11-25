@@ -9,7 +9,7 @@ A compiler for the AbU language.
 ### Requirements
 An [adequate](https://go.dev/doc/devel/release#policy) version of the Go language is required for installing and using `abuc` (it calls the Go language compiler in its execution).
 
-## Installation
+### Installation
 `abuc` can be installed with the go install command:
 ```
 $ go install github.com/abu-lang/abuc@latest
