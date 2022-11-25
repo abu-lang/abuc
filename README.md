@@ -4,7 +4,13 @@
 
 A compiler for the AbU language.
 
-`abuc` is a compiler translating programs written with AbU DSL [`abudsl`](https://github.com/abu-lang/abudsl) to different platforms. At the moment, the compiler supports the following target platforms: *Golang* code, *amd64* executables and *arm64* executables.
+`abuc` is a compiler translating programs written with AbU DSL [`abudsl`](https://github.com/abu-lang/abudsl) to different platforms. At the moment, the compiler supports the following target languages/architectures: *Golang* code, *amd64* executables and *arm64* executables; and the following operating systems: *Linux* based systems.
+
+## Installation
+The compiler can be retrieved with go get:
+```
+$ go get github.com/abu-lang/abuc
+```
 
 ## Usage
 ```
@@ -19,13 +25,15 @@ Usage: abuc [-ivh] [-o <output>] [-s <system>] [-t <target>] [-c <config>] <sour
   -h, --help               print usage
 
 Available options for <system>:
-  linux    compatibility with 'Linux' like systems 
+  linux    compile into 'Linux' based systems 
   
 Available options for <target>:
   go       compile into 'Golang' code
   amd64    compile into 'amd64' executable
   arm64    compile into 'arm64' executable
 ```
+
+### Example
 
 As an example, consider the following snippet of an `abudsl` program `test.abu`:
 ```
