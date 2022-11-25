@@ -35,6 +35,8 @@ Available values for <target>:
 Available values for <system>:
   run 'go tool dist list' to see a list of possible (<system>, <target>) pairs
 ```
+If `<output>` ends with a directory separator, the output is placed in the directory indicated by `<output>` (the directory is created if it does not exist).
+
 If `<source>` is not specified, the `abudsl` input is read from the standard input. If provided, the `<source>` option is to be specified as the last argument.
 
 ### Examples
