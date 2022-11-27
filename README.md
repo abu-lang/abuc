@@ -69,7 +69,7 @@ dev3 : "A third test device" {
 rule notifyPeers
     on activate
     for all (this.activate == true)
-        ext.test = this.name
+        do ext.test = this.name
 ```
 We can compile such program to *Go* code by typing:
 ```
