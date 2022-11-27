@@ -27,13 +27,14 @@ Usage: abuc [-ivh] [-o <output>] [-s <system>] [-t <target>] [-c <config>] [<sou
   -v, --version            print version information and exit
   -h, --help               print usage
 
-Available values for <target>:
+Available values for <target>
   go       compile into 'Go' code
   amd64    compile into 'amd64' executable
   arm64    compile into 'arm64' executable
 
-Available values for <system>:
-  run 'go tool dist list' to see a list of possible (<system>, <target>) pairs
+Available values for <system>
+  run the following command to see a list of possible values for <system>:
+  go tool dist list | grep 'amd64\|arm64' | sed -e 's/\/.*//' | sed -nr '$!N;/^(.*)\n\1$/!P;D'
 ```
 If `<output>` ends with a directory separator, the output is placed in the directory indicated by `<output>` (the directory is created if it does not exist).
 
