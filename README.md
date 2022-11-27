@@ -83,7 +83,7 @@ $ abuc -o testraspberry -s linux -t arm64 -c config.json raspberry-pi.abu
 ```
 in the `raspberry-pi` directory.
 The command outputs two *arm64* executables `testraspberry-controls` and `testraspberry-wheel`, that can be directly deployed on the Raspberry Pi.
-The executables accept the `-port` and `-join` command line options allowing the devices to join a system through the specification of a known member's address.
+The executables accept the `-port` and `-join` command line options. With the option `-port` it is possible to specify the listening port a device (to be used in join operations). To join a system of already running devices, a new member can be run with the options `-join`, specifying the address of a known device in the system and its listening port.
 
 ## License
 `abuc` is [licensed](https://github.com/abu-lang/abuc/blob/main/LICENSE) under the Apache-2.0 License.
