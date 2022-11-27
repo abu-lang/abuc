@@ -41,30 +41,40 @@ If `<source>` is not specified, the `abudsl` input is read from the standard inp
 
 ### Examples
 
-Consider the following snippet of an `abudsl` program `test.abu`:
+Consider the following very simple `abudsl` program `test.abu`:
 ```
 # AbU devices definition.
 
 dev1 : "A first test device" {
-    # Resources declaration.
-    ...
-}
+    logical string name = "dev1"
+    physical output string test = ""
+    physical input boolean activate
+} has notifyPeers
 
 dev2 : "A second test device" {
-    # Resources declaration.
-    ...
-}
+    logical string name = "dev2"
+    physical output string test = ""
+    physical input boolean activate
+} has notifyPeers
 
 dev3 : "A third test device" {
-    # Resources declaration.
-    ...
-}
+    logical string name = "dev3"
+    physical output string test = ""
+    physical input boolean activate
+} has notifyPeers
+
+# AbU rules definition.
+
+rule notifyPeers
+    on activate
+    for all (this.activate == true)
+        ext.test = this.name
 ```
 We can compile such program to *Go* code by typing:
 ```
 $ abuc -o testgo -t go test.abu
 ```
-The command outputs three *Go* source code files `testgo-dev1.go`, `testgo-dev2.go` and `testgo-dev3.go`. <br><br>
+The command outputs three *Go* source code files `testgo-dev1.go`, `testgo-dev2.go` and `testgo-dev3.go` containing (the translation of) device *dev1* code, device *dev2* code and device *dev3* code, respectively. All files contain (the translation of) the rule *notifyPeers* code. <br><br>
 
 Consider now the `abudsl` example program `raspberry-pi.abu`, that you can find in the [raspberry-pi](https://github.com/abu-lang/abudsl/tree/master/examples/raspberry-pi) directory of the `abudsl` repository. We can compile such program to *arm64* executables by typing:
 ```
