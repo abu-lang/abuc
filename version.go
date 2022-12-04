@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"golang.org/x/mod/module"
+	"golang.org/x/mod/semver"
 )
 
 // version tries to parse VCS information encoded in the running executable to
@@ -20,6 +21,10 @@ func version() string {
 	if !ok {
 		return res
 	}
+	if semver.IsValid(bi.Main.Version) {
+		return bi.Main.Version
+	}
+	// fallback to using VCS information
 	var rev string
 	var cmtt *time.Time
 	var mod bool
@@ -42,7 +47,7 @@ func version() string {
 	} else if cmtt == nil {
 		return rev
 	}
-	res = module.PseudoVersion("v0", "", *cmtt, rev[:12])
+	res = module.PseudoVersion("v0", previousVersion, *cmtt, rev[:12])
 	if mod {
 		res += "+modified"
 	}
