@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/abu-lang/abuc/preprocessor/parser"
+	"github.com/abu-lang/abuc/preprocessor/internal/parser"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 

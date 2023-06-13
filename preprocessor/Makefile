@@ -3,7 +3,7 @@
 
 # GNU Make >= 4.3
 
-P_DIR = parser
+P_DIR = internal/parser
 
 ANTLR = antlr4
 ANTLRFLAGS = -Dlanguage=Go -o '${P_DIR}' -package '$(notdir ${P_DIR})'
