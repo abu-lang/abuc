@@ -8,21 +8,26 @@ P_DIR = internal/parser
 ANTLR = antlr4
 ANTLRFLAGS = -Dlanguage=Go -o '${P_DIR}' -package '$(notdir ${P_DIR})'
 
-TOK = ${P_DIR}/SugaredAbuLexer.interp ${P_DIR}/SugaredAbuLexer.tokens
-PTOKS = ${P_DIR}/SugaredAbuParser.interp ${P_DIR}/SugaredAbuParser.tokens
+LEX_GRAMMAR = SugaredAbuLexer.g4
+PAR_GRAMMAR = SugaredAbuParser.g4
+
+tokens = $(addprefix ${P_DIR}/,$(addsuffix .interp,$(basename $(1)))  $(addsuffix .tokens,$(basename $(1))))
+
+LTOK = $(call tokens,${LEX_GRAMMAR})
+PTOK = $(call tokens,${PAR_GRAMMAR})
 LEX = ${P_DIR}/sugaredabu_lexer.go
 PAR = ${P_DIR}/sugaredabu_parser.go ${P_DIR}/sugaredabuparser_listener.go ${P_DIR}/sugaredabuparser_base_listener.go
 
 .PHONY: clean all
 .DELETE_ON_ERROR:
 
-all: ${PAR} ${PTOKS} ${LEX} ${TOK}
+all: ${PAR} ${PTOK} ${LEX} ${LTOK}
 
-${PAR} ${PTOKS} &: SugaredAbuParser.g4 ${TOK}
-	$(ANTLR) ${ANTLRFLAGS} -listener SugaredAbuParser.g4
+${PAR} ${PTOK} &: ${PAR_GRAMMAR} ${LTOK}
+	$(ANTLR) ${ANTLRFLAGS} -listener ${PAR_GRAMMAR}
 
-${LEX} ${TOK} &: SugaredAbuLexer.g4
+${LEX} ${LTOK} &: ${LEX_GRAMMAR}
 	$(ANTLR) ${ANTLRFLAGS} $^
 
 clean:
-	rm -f ${PAR} ${PTOKS} ${LEX} ${TOK}
+	rm -f ${PAR} ${PTOK} ${LEX} ${LTOK}
