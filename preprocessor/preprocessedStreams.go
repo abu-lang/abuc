@@ -8,7 +8,7 @@ import (
 	"fmt"
 
 	"github.com/abu-lang/abuc/preprocessor/internal/parser"
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr4-go/antlr/v4"
 )
 
 type errorHolder struct {

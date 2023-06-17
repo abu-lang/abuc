@@ -1,7 +1,7 @@
-// Code generated from SugaredAbuParser.g4 by ANTLR 4.10.1. DO NOT EDIT.
+// Code generated from SugaredAbuParser.g4 by ANTLR 4.13.0. DO NOT EDIT.
 
 package parser // SugaredAbuParser
-import "github.com/antlr/antlr4/runtime/Go/antlr"
+import "github.com/antlr4-go/antlr/v4"
 
 // BaseSugaredAbuParserListener is a complete listener for a parse tree produced by SugaredAbuParser.
 type BaseSugaredAbuParserListener struct{}

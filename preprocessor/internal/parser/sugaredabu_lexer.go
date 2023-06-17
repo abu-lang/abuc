@@ -1,13 +1,12 @@
-// Code generated from SugaredAbuLexer.g4 by ANTLR 4.10.1. DO NOT EDIT.
+// Code generated from SugaredAbuLexer.g4 by ANTLR 4.13.0. DO NOT EDIT.
 
 package parser
 
 import (
 	"fmt"
+	"github.com/antlr4-go/antlr/v4"
 	"sync"
 	"unicode"
-
-	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
 // Suppress unused import error
@@ -22,28 +21,28 @@ type SugaredAbuLexer struct {
 	// TODO: EOF string
 }
 
-var sugaredabulexerLexerStaticData struct {
+var SugaredAbuLexerLexerStaticData struct {
 	once                   sync.Once
 	serializedATN          []int32
-	channelNames           []string
-	modeNames              []string
-	literalNames           []string
-	symbolicNames          []string
-	ruleNames              []string
-	predictionContextCache *antlr.PredictionContextCache
+	ChannelNames           []string
+	ModeNames              []string
+	LiteralNames           []string
+	SymbolicNames          []string
+	RuleNames              []string
+	PredictionContextCache *antlr.PredictionContextCache
 	atn                    *antlr.ATN
 	decisionToDFA          []*antlr.DFA
 }
 
 func sugaredabulexerLexerInit() {
-	staticData := &sugaredabulexerLexerStaticData
-	staticData.channelNames = []string{
+	staticData := &SugaredAbuLexerLexerStaticData
+	staticData.ChannelNames = []string{
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN",
 	}
-	staticData.modeNames = []string{
+	staticData.ModeNames = []string{
 		"DEFAULT_MODE",
 	}
-	staticData.literalNames = []string{
+	staticData.LiteralNames = []string{
 		"", "'and'", "'or'", "'not'", "'absint'", "'absdec'", "'.'", "'+'",
 		"'-'", "'/'", "'*'", "'%'", "'=='", "'>'", "'<'", "'>='", "'<='", "'!='",
 		"'::'", "':'", "';'", "':='", "'='", "','", "'('", "')'", "'['", "']'",
@@ -52,7 +51,7 @@ func sugaredabulexerLexerInit() {
 		"'for'", "'all'", "'do'", "'owise'", "'define'", "'as'", "'boolean'",
 		"'integer'", "'decimal'", "'string'", "'true'", "'false'",
 	}
-	staticData.symbolicNames = []string{
+	staticData.SymbolicNames = []string{
 		"", "AND", "OR", "NOT", "ABSINT", "ABSDEC", "DOT", "PLUS", "MINUS",
 		"DIV", "MUL", "MOD", "EQUALS", "GT", "LT", "GTE", "LTE", "NOTEQUALS",
 		"DOUBLECOLON", "COLON", "SEMICOLON", "COLONEQUAL", "EQUALSIGN", "COMMA",
@@ -63,7 +62,7 @@ func sugaredabulexerLexerInit() {
 		"TRUE", "FALSE", "ID", "QUOTED_STRING", "DEC_LITERAL", "INT_LITERAL",
 		"WS", "COMMENT", "LINE_COMMENT",
 	}
-	staticData.ruleNames = []string{
+	staticData.RuleNames = []string{
 		"AND", "OR", "NOT", "ABSINT", "ABSDEC", "DOT", "PLUS", "MINUS", "DIV",
 		"MUL", "MOD", "EQUALS", "GT", "LT", "GTE", "LTE", "NOTEQUALS", "DOUBLECOLON",
 		"COLON", "SEMICOLON", "COLONEQUAL", "EQUALSIGN", "COMMA", "RL_BRACKET",
@@ -73,7 +72,7 @@ func sugaredabulexerLexerInit() {
 		"AS", "BOOLEAN", "INTEGER", "DECIMAL", "STRING", "TRUE", "FALSE", "ID",
 		"QUOTED_STRING", "DEC_LITERAL", "INT_LITERAL", "WS", "COMMENT", "LINE_COMMENT",
 	}
-	staticData.predictionContextCache = antlr.NewPredictionContextCache()
+	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
 		4, 0, 61, 411, 6, -1, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2,
 		4, 7, 4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2,
@@ -269,7 +268,7 @@ func sugaredabulexerLexerInit() {
 // NewSugaredAbuLexer(). You can call this function if you wish to initialize the static state ahead
 // of time.
 func SugaredAbuLexerInit() {
-	staticData := &sugaredabulexerLexerStaticData
+	staticData := &SugaredAbuLexerLexerStaticData
 	staticData.once.Do(sugaredabulexerLexerInit)
 }
 
@@ -278,13 +277,13 @@ func NewSugaredAbuLexer(input antlr.CharStream) *SugaredAbuLexer {
 	SugaredAbuLexerInit()
 	l := new(SugaredAbuLexer)
 	l.BaseLexer = antlr.NewBaseLexer(input)
-	staticData := &sugaredabulexerLexerStaticData
-	l.Interpreter = antlr.NewLexerATNSimulator(l, staticData.atn, staticData.decisionToDFA, staticData.predictionContextCache)
-	l.channelNames = staticData.channelNames
-	l.modeNames = staticData.modeNames
-	l.RuleNames = staticData.ruleNames
-	l.LiteralNames = staticData.literalNames
-	l.SymbolicNames = staticData.symbolicNames
+	staticData := &SugaredAbuLexerLexerStaticData
+	l.Interpreter = antlr.NewLexerATNSimulator(l, staticData.atn, staticData.decisionToDFA, staticData.PredictionContextCache)
+	l.channelNames = staticData.ChannelNames
+	l.modeNames = staticData.ModeNames
+	l.RuleNames = staticData.RuleNames
+	l.LiteralNames = staticData.LiteralNames
+	l.SymbolicNames = staticData.SymbolicNames
 	l.GrammarFileName = "SugaredAbuLexer.g4"
 	// TODO: l.EOF = antlr.TokenEOF
 

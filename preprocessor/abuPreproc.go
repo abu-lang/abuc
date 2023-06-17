@@ -8,7 +8,7 @@ import (
 	"fmt"
 
 	"github.com/abu-lang/abuc/preprocessor/internal/parser"
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr4-go/antlr/v4"
 )
 
 type abuPreproc struct {
@@ -57,7 +57,7 @@ func (l *abuPreproc) EnterResField(ctx *parser.ResFieldContext) {
 		return
 	}
 	t := AbuType{
-		TypeName: ctx.Type().GetText(),
+		TypeName: ctx.Type_().GetText(),
 		Readable: true,
 		Writable: true,
 	}
@@ -94,7 +94,7 @@ func (l *abuPreproc) ExitResDecl(ctx *parser.ResDeclContext) {
 		return
 	}
 	t := AbuType{
-		TypeName: ctx.Type().GetText(),
+		TypeName: ctx.Type_().GetText(),
 		Readable: true,
 		Writable: true,
 	}
@@ -229,7 +229,7 @@ func (l *abuPreproc) getTextFromContext(ctx antlr.RuleContext) string {
 // alteredCondition returns the text of the TaskContext's condition possibly
 // altered through the specified TokenStreamRewriter program (e.g. let substitutions).
 func (l *abuPreproc) alteredCondition(prog string, ctx *parser.TaskContext) string {
-	return l.rewriter.GetText(prog, &antlr.Interval{
+	return l.rewriter.GetText(prog, antlr.Interval{
 		Start: ctx.Expression().GetStart().GetTokenIndex(),
 		Stop:  ctx.Expression().GetStop().GetTokenIndex(),
 	})

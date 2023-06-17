@@ -3,7 +3,7 @@
 
 package preprocessor
 
-import "github.com/antlr/antlr4/runtime/Go/antlr"
+import "github.com/antlr4-go/antlr/v4"
 
 type alteredTokenStream struct {
 	program  string
@@ -15,5 +15,5 @@ func (s alteredTokenStream) Size() int {
 }
 
 func (s alteredTokenStream) GetText(start, stop int) string {
-	return s.rewriter.GetText(s.program, &antlr.Interval{Start: start, Stop: stop})
+	return s.rewriter.GetText(s.program, antlr.Interval{Start: start, Stop: stop})
 }

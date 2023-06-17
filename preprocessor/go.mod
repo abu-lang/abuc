@@ -2,4 +2,6 @@ module github.com/abu-lang/abuc/preprocessor
 
 go 1.18
 
-require github.com/antlr/antlr4/runtime/Go/antlr v0.0.0-20220415214452-44d87bc1d130
+require github.com/antlr4-go/antlr/v4 v4.13.0
+
+require golang.org/x/exp v0.0.0-20230515195305-f3d0a9c9a5cc // indirect
