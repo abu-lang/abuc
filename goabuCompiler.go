@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/abu-lang/abuc/parser"
+	"github.com/abu-lang/abuc/internal/parser"
 	"github.com/abu-lang/abuc/preprocessor"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )

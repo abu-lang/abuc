@@ -6,7 +6,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/abu-lang/abuc/parser"
+	"github.com/abu-lang/abuc/internal/parser"
 	"github.com/abu-lang/abuc/preprocessor"
 )
 
