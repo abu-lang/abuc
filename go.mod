@@ -1,6 +1,6 @@
 module github.com/abu-lang/abuc
 
-go 1.18
+go 1.20
 
 require (
 	github.com/abu-lang/abuc/preprocessor v0.1.0
