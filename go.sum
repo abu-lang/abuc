@@ -2,5 +2,9 @@ github.com/abu-lang/abuc/preprocessor v0.1.0 h1:r3IpKPAXOAmImHRvjq5sX0p0q4GKXWP8
 github.com/abu-lang/abuc/preprocessor v0.1.0/go.mod h1:MN8knnPM3zehVgSSWbTlAjDGYbKmte/tr5omCfOwP+Y=
 github.com/antlr/antlr4/runtime/Go/antlr v0.0.0-20220415214452-44d87bc1d130 h1:ZK7suI5cPJcdPeuB0ifv9hJ67qBjSwXGXfyFcJvQX64=
 github.com/antlr/antlr4/runtime/Go/antlr v0.0.0-20220415214452-44d87bc1d130/go.mod h1:F7bn7fEU90QkQ3tnmaTx3LTKLEDqnwWODIYppRQ5hnY=
-golang.org/x/mod v0.7.0 h1:LapD9S96VoQRhi/GrNTqeBJFrUjs5UHCAtTlgwA5oZA=
-golang.org/x/mod v0.7.0/go.mod h1:iBbtSCu2XBx23ZKBPSOrRkjjQPZFPuis4dIYUhu/chs=
+github.com/antlr4-go/antlr/v4 v4.13.1 h1:SqQKkuVZ+zWkMMNkjy5FZe5mr5WURWnlpmOuzYWrPrQ=
+github.com/antlr4-go/antlr/v4 v4.13.1/go.mod h1:GKmUxMtwp6ZgGwZSva4eWPC5mS6vUAmOABFgjdkM7Nw=
+golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 h1:vr/HnozRka3pE4EsMEg1lgkXJkTFJCVUX+S/ZT6wYzM=
+golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842/go.mod h1:XtvwrStGgqGPLc4cjQfWqZHG1YFdYs6swckp8vpsjnc=
+golang.org/x/mod v0.17.0 h1:zY54UmvipHiNd+pm+m0x9KhZ9hl1/7QNMyxXbc6ICqA=
+golang.org/x/mod v0.17.0/go.mod h1:hTbmBsO62+eylJbnUtE2MGJUyE7QWk4xUqPFrRgJ+7c=

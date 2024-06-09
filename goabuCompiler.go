@@ -12,7 +12,7 @@ import (
 
 	"github.com/abu-lang/abuc/internal/parser"
 	"github.com/abu-lang/abuc/preprocessor"
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr4-go/antlr/v4"
 )
 
 //go:embed goabu.go.tpl

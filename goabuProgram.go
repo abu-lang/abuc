@@ -8,7 +8,7 @@ import (
 
 	"github.com/abu-lang/abuc/internal/parser"
 	"github.com/abu-lang/abuc/preprocessor"
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr4-go/antlr/v4"
 )
 
 type goabuProgram struct {
@@ -85,7 +85,8 @@ type abuRewriter struct {
 }
 
 func newAbuRewriter(stream *antlr.CommonTokenStream, cfg goabuConfig, st preprocessor.DeviceSymbolTable, errCb func(error)) *abuRewriter {
-	return &abuRewriter{rewriter: antlr.NewTokenStreamRewriter(stream),
+	return &abuRewriter{
+		rewriter:          antlr.NewTokenStreamRewriter(stream),
 		DeviceSymbolTable: st,
 		goabuConfig:       cfg,
 		errCb:             errCb,
@@ -186,7 +187,7 @@ func (t *abuRewriter) ExitTask(ctx *parser.TaskContext) {
 // getAlteredText returns the text of the ParserRuleContext possibly altered
 // through the TokenStreamRewriter default program.
 func (t *abuRewriter) getAlteredText(ctx antlr.ParserRuleContext) string {
-	return t.rewriter.GetText("default", &antlr.Interval{
+	return t.rewriter.GetText("default", antlr.Interval{
 		Start: ctx.GetStart().GetTokenIndex(),
 		Stop:  ctx.GetStop().GetTokenIndex(),
 	})
