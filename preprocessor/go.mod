@@ -1,6 +1,6 @@
 module github.com/abu-lang/abuc/preprocessor
 
-go 1.20
+go 1.22.0
 
 require github.com/antlr4-go/antlr/v4 v4.13.0
 
