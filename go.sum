@@ -1,7 +1,5 @@
-github.com/abu-lang/abuc/preprocessor v0.1.0 h1:r3IpKPAXOAmImHRvjq5sX0p0q4GKXWP8IPjFfl6tcmc=
-github.com/abu-lang/abuc/preprocessor v0.1.0/go.mod h1:MN8knnPM3zehVgSSWbTlAjDGYbKmte/tr5omCfOwP+Y=
-github.com/antlr/antlr4/runtime/Go/antlr v0.0.0-20220415214452-44d87bc1d130 h1:ZK7suI5cPJcdPeuB0ifv9hJ67qBjSwXGXfyFcJvQX64=
-github.com/antlr/antlr4/runtime/Go/antlr v0.0.0-20220415214452-44d87bc1d130/go.mod h1:F7bn7fEU90QkQ3tnmaTx3LTKLEDqnwWODIYppRQ5hnY=
+github.com/abu-lang/abuc/preprocessor v0.2.0 h1:0CTlj6FVqhc8Nw1W8AyI9PIfdfeNziYrsu/IVhvYeaw=
+github.com/abu-lang/abuc/preprocessor v0.2.0/go.mod h1:B2RRXVItyofXl2G7Z1qXGL1Vo8ppJ5Z6lZqeCxJssbY=
 github.com/antlr4-go/antlr/v4 v4.13.1 h1:SqQKkuVZ+zWkMMNkjy5FZe5mr5WURWnlpmOuzYWrPrQ=
 github.com/antlr4-go/antlr/v4 v4.13.1/go.mod h1:GKmUxMtwp6ZgGwZSva4eWPC5mS6vUAmOABFgjdkM7Nw=
 golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 h1:vr/HnozRka3pE4EsMEg1lgkXJkTFJCVUX+S/ZT6wYzM=
