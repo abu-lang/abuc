@@ -42,7 +42,7 @@ func main() {
 		target = "abu"
 	}
 	switch target {
-	case "go", "abu", "amd64", "arm64":
+	case "go", "abu", "amd64", "arm64", "arm":
 	default:
 		fmt.Fprintf(os.Stderr, "unknown target %s\n", target)
 		os.Exit(1)
@@ -68,7 +68,8 @@ func main() {
 		go func(out chan<- struct {
 			device string
 			errs   []error
-		}) {
+		},
+		) {
 			o := struct {
 				device string
 				errs   []error

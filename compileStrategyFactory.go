@@ -12,7 +12,7 @@ func makeCompileStrategy(sys, tgt, out, cfg string) (compileStrategy, error) {
 		return makeAbuCompiler(comm)
 	case "go":
 		return makeGoabuCompiler(comm, cfg)
-	case "arm64", "amd64":
+	case "arm64", "amd64", "arm":
 		return makeMachineCodeCompiler(comm, cfg)
 	default:
 		panic(errors.New("no compile strategy for target:" + tgt))

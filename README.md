@@ -4,7 +4,7 @@
 
 A compiler for the AbU language.
 
-`abuc` is a compiler translating programs written with AbU DSL [`abudsl`](https://github.com/abu-lang/abudsl) to different platforms. At the moment, the compiler supports the following target languages/architectures: *Go* code, *amd64* executables and *arm64* executables.
+`abuc` is a compiler translating programs written with AbU DSL [`abudsl`](https://github.com/abu-lang/abudsl) to different platforms. At the moment, the compiler supports the following target languages/architectures: *Go* code, *amd64* executables and *arm/arm64* executables.
 
 ### Requirements
 An [adequate](https://go.dev/doc/devel/release#policy) version of the Go language is required for installing and using `abuc` (it calls the Go language compiler in its execution).
@@ -31,6 +31,7 @@ Available values for <target>
   go       compile into 'Go' code
   amd64    compile into 'amd64' executable
   arm64    compile into 'arm64' executable
+  arm      compile into 'arm' executable
 
 Available values for <system>
   run the following command to see a list of possible values for <system>:
