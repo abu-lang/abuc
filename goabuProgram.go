@@ -172,13 +172,6 @@ func (t *abuRewriter) ExitExpression(ctx *parser.ExpressionContext) {
 	}
 }
 
-// ExitActions is called when production actions is exited.
-func (t *abuRewriter) ExitActions(ctx *parser.ActionsContext) {
-	for i := 0; ctx.COMMA(i) != nil; i++ {
-		t.rewriter.ReplaceTokenDefaultPos(ctx.COMMA(i).GetSymbol(), ";")
-	}
-}
-
 // ExitTask is called when production task is exited.
 func (t *abuRewriter) ExitTask(ctx *parser.TaskContext) {
 	t.inTask = false
