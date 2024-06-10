@@ -26,8 +26,10 @@ func main() {
     {{range .Resources}}dev_state{{.}}
     {{end}}
     knowledge_base := []string{
-        {{range .Rules}}{{.}},
-        {{end}}
+      `{{range .Rules}}
+{{.}}
+{{end}}
+`,
     }
 
     lg_cfg := config.LogConfig{Level: config.LogInfo}

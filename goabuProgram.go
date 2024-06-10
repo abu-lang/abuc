@@ -59,7 +59,7 @@ func makeGoabuProgram(prog abuProgram, cfg goabuConfig, stream *antlr.CommonToke
 		res.Resources = append(res.Resources, list.translateSimpleResource(id, simple))
 	}
 	for _, rule := range prog.rules {
-		res.Rules = append(res.Rules, list.translateRule(*rule))
+		res.Rules = append(res.Rules, list.translate(*rule))
 	}
 	if len(errList.errors) > 0 {
 		return goabuProgram{}, errList.errors
@@ -232,10 +232,4 @@ func (t *abuRewriter) translateComposedResource(id string, nested map[string]abu
 	}
 	init += ")"
 	return init
-}
-
-// translateRule returns the text of the passed ParserRuleContext quoted with
-// backticks and with the necessary modifications for matching GoAbU's syntax.
-func (t *abuRewriter) translateRule(ctx antlr.ParserRuleContext) string {
-	return fmt.Sprintf("`%s`", t.translate(ctx))
 }
