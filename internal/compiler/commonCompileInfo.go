@@ -1,9 +1,13 @@
 // Copyright 2022 Massimo Comuzzo, Michele Pasqua and Marino Miculan
 // SPDX-License-Identifier: Apache-2.0
 
-package main
+package compiler
 
-import "os"
+import (
+	"os"
+
+	"github.com/abu-lang/abuc/internal/compiler/version"
+)
 
 type commonCompileInfo struct {
 	compilerVersion string
@@ -13,10 +17,11 @@ type commonCompileInfo struct {
 }
 
 func makeCommonCompileInfo(sys, tgt, out string) commonCompileInfo {
-	return commonCompileInfo{compilerVersion: version(),
-		output: out,
-		system: sys,
-		target: tgt,
+	return commonCompileInfo{
+		compilerVersion: version.Get(),
+		output:          out,
+		system:          sys,
+		target:          tgt,
 	}
 }
 

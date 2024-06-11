@@ -1,7 +1,7 @@
 // Copyright 2022 Massimo Comuzzo, Michele Pasqua and Marino Miculan
 // SPDX-License-Identifier: Apache-2.0
 
-package main
+package compiler
 
 import (
 	"fmt"
@@ -19,7 +19,7 @@ func makeAbuCompiler(comm commonCompileInfo) (compileStrategy, error) {
 	return abuCompiler{commonCompileInfo: comm}, nil
 }
 
-func (a abuCompiler) compile(device string, stream preprocessor.TrivialStream, st preprocessor.DeviceSymbolTable) []error {
+func (a abuCompiler) Compile(device string, stream preprocessor.TrivialStream, st preprocessor.DeviceSymbolTable) []error {
 	out := outputFile(a.output, device, ".abu")
 	os.MkdirAll(filepath.Dir(out), 0755)
 	f, err := os.Create(out)

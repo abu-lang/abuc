@@ -1,7 +1,7 @@
 // Copyright 2022 Massimo Comuzzo, Michele Pasqua and Marino Miculan
 // SPDX-License-Identifier: Apache-2.0
 
-package main
+package version
 
 import (
 	"runtime/debug"
@@ -11,11 +11,11 @@ import (
 	"golang.org/x/mod/semver"
 )
 
-// version tries to parse VCS information encoded in the running executable to
+// Get tries to parse VCS information encoded in the running executable to
 // return a Go pseudo-version string. The pseudo-version string is suffixed with
 // "+modified" if the VCS information reports an unclean state. On failure the
 // value "unknown" or the revision's ID is returned.
-func version() string {
+func Get() string {
 	res := "unknown"
 	bi, ok := debug.ReadBuildInfo()
 	if !ok {
@@ -54,7 +54,7 @@ func version() string {
 	return res
 }
 
-const license = `
+const License = `
 Apache License Version 2.0
 
 Copyright 2022 Massimo Comuzzo, Michele Pasqua and Marino Miculan

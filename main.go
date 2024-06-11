@@ -9,6 +9,9 @@ import (
 	"io"
 	"os"
 	"runtime"
+
+	"github.com/abu-lang/abuc/internal/compiler"
+	"github.com/abu-lang/abuc/internal/compiler/version"
 )
 
 func main() {
@@ -33,8 +36,8 @@ func main() {
 	flag.BoolVar(&version_opt, "v", false, "print version information and exit")
 	flag.Parse()
 	if version_opt {
-		fmt.Println("abuc version " + version())
-		fmt.Println(license)
+		fmt.Println("abuc version " + version.Get())
+		fmt.Println(version.License)
 		os.Exit(0)
 	}
 	source := flag.Arg(0)
@@ -53,7 +56,7 @@ func main() {
 		}
 		os.Exit(2)
 	})
-	compiler, err := makeCompileStrategy(system, target, output, config)
+	compiler, err := compiler.MakeCompileStrategy(system, target, output, config)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(4)
@@ -80,7 +83,7 @@ func main() {
 			if err != nil {
 				o.errs = []error{err}
 			} else {
-				o.errs = compiler.compile(d, ts, st)
+				o.errs = compiler.Compile(d, ts, st)
 			}
 			out <- o
 		}(outcomes)

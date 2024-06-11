@@ -1,7 +1,7 @@
 // Copyright 2022 Massimo Comuzzo, Michele Pasqua and Marino Miculan
 // SPDX-License-Identifier: Apache-2.0
 
-package main
+package source
 
 import (
 	"fmt"
@@ -10,49 +10,48 @@ import (
 	"github.com/abu-lang/abuc/preprocessor"
 )
 
-type abuProgram struct {
+type Abu struct {
 	preprocessor.DeviceSymbolTable
-	id                string
 	invariant         *parser.IExpressionContext
-	simpleResources   map[string]abuResource
-	composedResources map[string]map[string]abuResource
+	simpleResources   map[string]AbuResource
+	composedResources map[string]map[string]AbuResource
 	rules             map[string]*parser.IEcaruleContext
+	id                string
 	tick              int
 }
 
-func makeAbuProgram(st preprocessor.DeviceSymbolTable) abuProgram {
-	return abuProgram{
+func MakeAbu(st preprocessor.DeviceSymbolTable) Abu {
+	return Abu{
 		DeviceSymbolTable: st,
-		simpleResources:   make(map[string]abuResource),
-		composedResources: make(map[string]map[string]abuResource),
+		simpleResources:   make(map[string]AbuResource),
+		composedResources: make(map[string]map[string]AbuResource),
 		rules:             make(map[string]*parser.IEcaruleContext),
 		tick:              1,
 	}
 }
 
-type abuResource struct {
-	preprocessor.AbuType
+type AbuResource struct {
 	initExpr *parser.IExpressionContext
+	preprocessor.AbuType
 }
 
-type abuParser struct {
+type AbuParser struct {
 	parser.BaseAbuParserListener
-
-	abuProgram
+	parseError func(error)
+	Abu
 	inRuleDefs bool
 	inTask     bool
-	parseError func(error)
 }
 
-func newAbuParser(st preprocessor.DeviceSymbolTable, errorCallback func(error)) *abuParser {
-	return &abuParser{
-		abuProgram: makeAbuProgram(st),
+func NewAbuParser(st preprocessor.DeviceSymbolTable, errorCallback func(error)) *AbuParser {
+	return &AbuParser{
+		Abu:        MakeAbu(st),
 		parseError: errorCallback,
 	}
 }
 
 // EnterResDecl is called when production resDecl is entered.
-func (p *abuParser) EnterResDecl(ctx *parser.ResDeclContext) {
+func (p *AbuParser) EnterResDecl(ctx *parser.ResDeclContext) {
 	if ctx.CompResDecl() != nil {
 		return
 	}
@@ -62,7 +61,7 @@ func (p *abuParser) EnterResDecl(ctx *parser.ResDeclContext) {
 		p.parseError(fmt.Errorf("resource %s missing from symbol table", id))
 		return
 	}
-	r := abuResource{AbuType: sym.Type()}
+	r := AbuResource{AbuType: sym.Type()}
 	if ctx.Expression() != nil {
 		expr := ctx.Expression()
 		r.initExpr = &expr
@@ -71,7 +70,7 @@ func (p *abuParser) EnterResDecl(ctx *parser.ResDeclContext) {
 }
 
 // EnterCompResDecl is called when production compResDecl is entered.
-func (p *abuParser) EnterCompResDecl(ctx *parser.CompResDeclContext) {
+func (p *AbuParser) EnterCompResDecl(ctx *parser.CompResDeclContext) {
 	typ := ctx.ID(0).GetText()
 	id := ctx.ID(1).GetText()
 	decls := p.TypeInfo(typ)
@@ -79,9 +78,9 @@ func (p *abuParser) EnterCompResDecl(ctx *parser.CompResDeclContext) {
 		p.parseError(fmt.Errorf("custom type %s is undefined", typ))
 		return
 	}
-	c := make(map[string]abuResource)
+	c := make(map[string]AbuResource)
 	for k, v := range decls {
-		c[k] = abuResource{AbuType: v.Type()}
+		c[k] = AbuResource{AbuType: v.Type()}
 	}
 	for i := 2; ctx.ID(i) != nil; i++ {
 		resID := ctx.ID(i).GetText()
@@ -94,7 +93,7 @@ func (p *abuParser) EnterCompResDecl(ctx *parser.CompResDeclContext) {
 }
 
 // ExitDevice is called when production device is exited.
-func (p *abuParser) ExitDevice(ctx *parser.DeviceContext) {
+func (p *AbuParser) ExitDevice(ctx *parser.DeviceContext) {
 	// register device id
 	p.id = ctx.ID(0).GetText()
 	// track device rules
@@ -111,7 +110,7 @@ func (p *abuParser) ExitDevice(ctx *parser.DeviceContext) {
 }
 
 // EnterEcarule is called when production ecarule is entered.
-func (p *abuParser) EnterEcarule(ctx *parser.EcaruleContext) {
+func (p *AbuParser) EnterEcarule(ctx *parser.EcaruleContext) {
 	r, present := p.rules[ctx.ID().GetText()]
 	if !present {
 		return
@@ -124,31 +123,31 @@ func (p *abuParser) EnterEcarule(ctx *parser.EcaruleContext) {
 }
 
 // ExitSimpleResource is called when production simpleResource is exited.
-func (p *abuParser) ExitSimpleResource(ctx *parser.SimpleResourceContext) {
+func (p *AbuParser) ExitSimpleResource(ctx *parser.SimpleResourceContext) {
 	if !p.inTask && ctx.EXT() != nil {
 		p.parseError(fmt.Errorf("resource %s cannot be remote in this context", ctx.ID().GetText()))
 	}
 }
 
 // ExitNestedResource is called when production nestedResource is exited.
-func (p *abuParser) ExitNestedResource(ctx *parser.NestedResourceContext) {
+func (p *AbuParser) ExitNestedResource(ctx *parser.NestedResourceContext) {
 	if !p.inTask && ctx.EXT() != nil {
 		p.parseError(fmt.Errorf("resource %s[%s] cannot be remote in this context", ctx.ID(0).GetText(), ctx.ID(1).GetText()))
 	}
 }
 
 // EnterTask is called when production task is entered.
-func (p *abuParser) EnterTask(ctx *parser.TaskContext) {
+func (p *AbuParser) EnterTask(ctx *parser.TaskContext) {
 	p.inTask = true
 }
 
 // ExitTask is called when production task is exited.
-func (p *abuParser) ExitTask(ctx *parser.TaskContext) {
+func (p *AbuParser) ExitTask(ctx *parser.TaskContext) {
 	p.inTask = false
 }
 
 // ExitProgram is called when production program is exited.
-func (p *abuParser) ExitProgram(ctx *parser.ProgramContext) {
+func (p *AbuParser) ExitProgram(ctx *parser.ProgramContext) {
 	for n, r := range p.rules {
 		if r == nil {
 			p.parseError(fmt.Errorf("missing definition of rule %s", n))

@@ -1,11 +1,11 @@
 // Copyright 2022 Massimo Comuzzo, Michele Pasqua and Marino Miculan
 // SPDX-License-Identifier: Apache-2.0
 
-package main
+package compiler
 
 import "errors"
 
-func makeCompileStrategy(sys, tgt, out, cfg string) (compileStrategy, error) {
+func MakeCompileStrategy(sys, tgt, out, cfg string) (compileStrategy, error) {
 	comm := makeCommonCompileInfo(sys, tgt, out)
 	switch tgt {
 	case "abu":

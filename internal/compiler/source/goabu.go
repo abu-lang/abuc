@@ -1,17 +1,18 @@
 // Copyright 2022 Massimo Comuzzo, Michele Pasqua and Marino Miculan
 // SPDX-License-Identifier: Apache-2.0
 
-package main
+package source
 
 import (
 	"fmt"
 
+	"github.com/abu-lang/abuc/internal/compiler/config"
 	"github.com/abu-lang/abuc/internal/parser"
 	"github.com/abu-lang/abuc/preprocessor"
 	"github.com/antlr4-go/antlr/v4"
 )
 
-type goabuProgram struct {
+type Goabu struct {
 	Id               string
 	Invariant        *string
 	Resources        []string
@@ -37,17 +38,17 @@ func typeToGoabu(typ string) string {
 	}
 }
 
-// makeGoabuProgram uses an abuProgram and the CommonTokenStream used for its parsing to
-// create an equivalent goabuProgram.
+// MakeGoabu uses an [Abu] source and the CommonTokenStream used for its parsing to
+// create an equivalent [Goabu] source.
 //
 // Precondition: r != nil for _, r := range prog.rules
-func makeGoabuProgram(prog abuProgram, cfg goabuConfig, stream *antlr.CommonTokenStream) (goabuProgram, []error) {
-	res := goabuProgram{
+func MakeGoabu(prog Abu, cfg config.Goabu, stream *antlr.CommonTokenStream) (Goabu, []error) {
+	res := Goabu{
 		Id:   prog.id,
 		Tick: prog.tick,
 	}
-	errList := errorHolder{}
-	list := newAbuRewriter(stream, cfg, prog.DeviceSymbolTable, errList.addError)
+	errList := ErrorHolder{}
+	list := newAbuRewriter(stream, cfg, prog.DeviceSymbolTable, errList.AddError)
 	for id, nested := range prog.composedResources {
 		res.Resources = append(res.Resources, list.translateComposedResource(id, nested))
 	}
@@ -61,8 +62,8 @@ func makeGoabuProgram(prog abuProgram, cfg goabuConfig, stream *antlr.CommonToke
 	for _, rule := range prog.rules {
 		res.Rules = append(res.Rules, list.translate(*rule))
 	}
-	if len(errList.errors) > 0 {
-		return goabuProgram{}, errList.errors
+	if len(errList.Errors) > 0 {
+		return Goabu{}, errList.Errors
 	}
 	if cfg.StateInitializer != "" {
 		res.StateInitializer = cfg.StateInitializer
@@ -77,18 +78,17 @@ func makeGoabuProgram(prog abuProgram, cfg goabuConfig, stream *antlr.CommonToke
 type abuRewriter struct {
 	parser.BaseAbuParserListener
 	preprocessor.DeviceSymbolTable
-	goabuConfig
-
-	inTask   bool
 	errCb    func(error)
 	rewriter *antlr.TokenStreamRewriter
+	config.Goabu
+	inTask bool
 }
 
-func newAbuRewriter(stream *antlr.CommonTokenStream, cfg goabuConfig, st preprocessor.DeviceSymbolTable, errCb func(error)) *abuRewriter {
+func newAbuRewriter(stream *antlr.CommonTokenStream, cfg config.Goabu, st preprocessor.DeviceSymbolTable, errCb func(error)) *abuRewriter {
 	return &abuRewriter{
 		rewriter:          antlr.NewTokenStreamRewriter(stream),
 		DeviceSymbolTable: st,
-		goabuConfig:       cfg,
+		Goabu:             cfg,
 		errCb:             errCb,
 	}
 }
@@ -178,7 +178,7 @@ func (t *abuRewriter) ExitTask(ctx *parser.TaskContext) {
 }
 
 // getAlteredText returns the text of the ParserRuleContext possibly altered
-// through the TokenStreamRewriter default program.
+// through the [antlr.TokenStreamRewriter] default program.
 func (t *abuRewriter) getAlteredText(ctx antlr.ParserRuleContext) string {
 	return t.rewriter.GetText("default", antlr.Interval{
 		Start: ctx.GetStart().GetTokenIndex(),
@@ -194,7 +194,7 @@ func (t *abuRewriter) translate(ctx antlr.ParserRuleContext) string {
 }
 
 // translateSimpleResource returns the simple resource's initialization in GoAbU's syntax.
-func (t *abuRewriter) translateSimpleResource(id string, resource abuResource) string {
+func (t *abuRewriter) translateSimpleResource(id string, resource AbuResource) string {
 	r := fmt.Sprintf(".%s[\"%s\"] = ", typeToGoabu(resource.TypeName), id)
 	if resource.initExpr != nil {
 		r += t.translate(*resource.initExpr)
@@ -218,7 +218,7 @@ func (t *abuRewriter) translateSimpleResource(id string, resource abuResource) s
 }
 
 // translateComposedResource returns the composed resource's initialization in GoAbU's syntax.
-func (t *abuRewriter) translateComposedResource(id string, nested map[string]abuResource) string {
+func (t *abuRewriter) translateComposedResource(id string, nested map[string]AbuResource) string {
 	typ := t.Symbol(id).Type()
 	mapp, present := t.Mappings[typ.TypeName]
 	if !present {

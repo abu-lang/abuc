@@ -1,7 +1,7 @@
 // Copyright 2022 Massimo Comuzzo, Michele Pasqua and Marino Miculan
 // SPDX-License-Identifier: Apache-2.0
 
-package main
+package compiler
 
 import (
 	"errors"
@@ -11,24 +11,23 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/abu-lang/abuc/internal/compiler/config"
 	"github.com/abu-lang/abuc/preprocessor"
 )
 
 type machineCodeCompiler struct {
+	goCompiler  compileStrategy
+	ready       <-chan error
+	tidyOnce    *sync.Once
+	lockGoBuild *sync.Mutex
 	commonCompileInfo
-
-	goDest     string
-	goCompiler compileStrategy
-
-	additionalFiles []string
+	goDest          string
 	workDir         string
-	ready           <-chan error
-	tidyOnce        *sync.Once
-	lockGoBuild     *sync.Mutex
+	additionalFiles []string
 }
 
 func makeMachineCodeCompiler(comm commonCompileInfo, cfgPath string) (compileStrategy, error) {
-	conf, err := readGoabuConfig(cfgPath)
+	conf, err := config.ReadFromFile(cfgPath)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +39,7 @@ func makeMachineCodeCompiler(comm commonCompileInfo, cfgPath string) (compileStr
 	if comm.output != "" && !os.IsPathSeparator(comm.output[len(comm.output)-1]) {
 		goDest = filepath.Join(wd, filepath.Base(comm.output))
 	}
-	gs, err := makeCompileStrategy(comm.system, "go", goDest, cfgPath)
+	gs, err := MakeCompileStrategy(comm.system, "go", goDest, cfgPath)
 	if err != nil {
 		os.Remove(wd)
 		return nil, err
@@ -71,9 +70,9 @@ func (m machineCodeCompiler) Close() error {
 	return os.RemoveAll(m.workDir)
 }
 
-func (m machineCodeCompiler) compile(device string, stream preprocessor.TrivialStream, st preprocessor.DeviceSymbolTable) []error {
+func (m machineCodeCompiler) Compile(device string, stream preprocessor.TrivialStream, st preprocessor.DeviceSymbolTable) []error {
 	// transpile from abudsl to Go
-	errs := m.goCompiler.compile(device, stream, st)
+	errs := m.goCompiler.Compile(device, stream, st)
 	if len(errs) > 0 {
 		return errs
 	}
