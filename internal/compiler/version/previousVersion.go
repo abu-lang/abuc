@@ -3,4 +3,4 @@
 
 package version
 
-const previousVersion = "v0.2.0"
+const previousVersion = "v0.2.1"
